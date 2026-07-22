@@ -4,6 +4,7 @@ export interface Project {
   colour: string
   archived: boolean
   createdAt: number
+  hourlyRate: number
 }
 
 export interface Entry {
