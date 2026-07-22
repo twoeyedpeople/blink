@@ -123,6 +123,15 @@ export function EntryRow({ entry, project, store }: EntryRowProps) {
               className="mt-1 block rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm outline-none"
             />
           </label>
+          <label className="text-xs font-bold text-ink/60">
+            Logged by
+            <input
+              value={entry.loggedBy ?? ''}
+              onChange={(e) => store.updateEntry(entry.id, { loggedBy: e.target.value })}
+              placeholder="Name"
+              className="mt-1 block w-28 rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm outline-none placeholder:text-ink/35"
+            />
+          </label>
           <button
             onClick={() => {
               if (confirm('Delete this entry? This cannot be undone.')) {

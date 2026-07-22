@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Download } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, Download } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { addMonths, format, isSameMonth, startOfMonth } from 'date-fns'
 import type { Store } from '../hooks/useStore'
@@ -7,14 +7,19 @@ import { EntryRow } from './EntryRow'
 
 export function HistoryList({ store }: { store: Store }) {
   const [month, setMonth] = useState(() => startOfMonth(new Date()))
+  const [projectFilter, setProjectFilter] = useState('all')
   const { entries, projects } = store
 
   const monthEntries = useMemo(
     () =>
       entries
-        .filter((e) => isSameMonth(new Date(e.start), month))
+        .filter(
+          (e) =>
+            isSameMonth(new Date(e.start), month) &&
+            (projectFilter === 'all' || e.projectId === projectFilter),
+        )
         .sort((a, b) => b.start - a.start),
-    [entries, month],
+    [entries, month, projectFilter],
   )
 
   const totalBilled = monthEntries.reduce((sum, e) => sum + billedMinutes(e.end - e.start), 0)
@@ -60,7 +65,11 @@ export function HistoryList({ store }: { store: Store }) {
     const blob = new Blob([rows.map((r) => r.join(',')).join('\n')], { type: 'text/csv' })
     const a = document.createElement('a')
     a.href = URL.createObjectURL(blob)
-    a.download = `blink-${format(month, 'yyyy-MM')}.csv`
+    const projectSuffix =
+      projectFilter === 'all'
+        ? ''
+        : `-${(projects.find((p) => p.id === projectFilter)?.name ?? '').toLowerCase().replace(/\s+/g, '-')}`
+    a.download = `blink-${format(month, 'yyyy-MM')}${projectSuffix}.csv`
     a.click()
     URL.revokeObjectURL(a.href)
   }
@@ -87,20 +96,40 @@ export function HistoryList({ store }: { store: Store }) {
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
-        {monthEntries.length > 0 && (
-          <button
-            onClick={exportCsv}
-            className="flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold hover:bg-pink-soft"
-          >
-            <Download className="h-4 w-4" /> Export CSV
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          <div className="relative">
+            <select
+              value={projectFilter}
+              onChange={(e) => setProjectFilter(e.target.value)}
+              className="appearance-none rounded-full border-2 border-ink bg-white py-2 pl-4 pr-9 text-sm font-bold outline-none focus:bg-pink-soft"
+            >
+              <option value="all">All projects</option>
+              {projects.map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                  {p.archived ? ' (archived)' : ''}
+                </option>
+              ))}
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2" />
+          </div>
+          {monthEntries.length > 0 && (
+            <button
+              onClick={exportCsv}
+              className="flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold hover:bg-pink-soft"
+            >
+              <Download className="h-4 w-4" /> Export CSV
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="mt-5 rounded-2xl border-2 border-ink bg-pink-soft p-5">
         <p className="font-display text-4xl font-black">{formatBilled(totalBilled)}</p>
-        <p className="text-sm font-medium text-ink/60">billed this month</p>
-        {byProject.length > 0 && (
+        <p className="text-sm font-medium text-ink/60">
+          billed this month{projectFilter !== 'all' ? ' · ' + (projects.find((p) => p.id === projectFilter)?.name ?? '') : ''}
+        </p>
+        {projectFilter === 'all' && byProject.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
             {byProject.map(({ project, mins }) => (
               <span
@@ -119,7 +148,11 @@ export function HistoryList({ store }: { store: Store }) {
       </div>
 
       {byDay.length === 0 ? (
-        <p className="mt-6 text-center text-ink/50">Nothing tracked this month. Yet.</p>
+        <p className="mt-6 text-center text-ink/50">
+          {projectFilter === 'all'
+            ? 'Nothing tracked this month. Yet.'
+            : `Nothing tracked for ${projects.find((p) => p.id === projectFilter)?.name ?? 'this project'} this month.`}
+        </p>
       ) : (
         byDay.map((group) => (
           <div key={group.day} className="mt-6">
