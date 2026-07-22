@@ -81,13 +81,13 @@ export function EntryRow({ entry, project, store }: EntryRowProps) {
       </div>
 
       {editing && (
-        <div className="mt-4 flex flex-wrap items-end gap-3 border-t-2 border-ink/10 pt-4">
-          <label className="text-xs font-bold text-ink/60">
+        <div className="mt-4 flex flex-nowrap items-end gap-2 overflow-x-auto border-t-2 border-ink/10 pt-4">
+          <label className="shrink-0 text-xs font-bold text-ink/60">
             Project
             <select
               value={entry.projectId}
               onChange={(e) => store.updateEntry(entry.id, { projectId: e.target.value })}
-              className="mt-1 block rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm font-bold outline-none"
+              className="mt-1 block w-24 rounded-xl border-2 border-ink bg-white px-2 py-2 text-sm font-bold outline-none"
             >
               {activeProjects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -96,40 +96,40 @@ export function EntryRow({ entry, project, store }: EntryRowProps) {
               ))}
             </select>
           </label>
-          <label className="text-xs font-bold text-ink/60">
+          <label className="shrink-0 text-xs font-bold text-ink/60">
             Date
             <input
               type="date"
               value={toDateInput(entry.start)}
               onChange={(e) => moveTime(e.target.value, toTimeInput(entry.start), toTimeInput(entry.end))}
-              className="mt-1 block rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm outline-none"
+              className="mt-1 block w-[9.5rem] rounded-xl border-2 border-ink bg-white px-2 py-2 text-sm outline-none"
             />
           </label>
-          <label className="text-xs font-bold text-ink/60">
+          <label className="shrink-0 text-xs font-bold text-ink/60">
             Start
             <input
               type="time"
               value={toTimeInput(entry.start)}
               onChange={(e) => moveTime(toDateInput(entry.start), e.target.value, toTimeInput(entry.end))}
-              className="mt-1 block rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm outline-none"
+              className="mt-1 block w-28 rounded-xl border-2 border-ink bg-white px-2 py-2 text-sm outline-none"
             />
           </label>
-          <label className="text-xs font-bold text-ink/60">
+          <label className="shrink-0 text-xs font-bold text-ink/60">
             End
             <input
               type="time"
               value={toTimeInput(entry.end)}
               onChange={(e) => moveTime(toDateInput(entry.start), toTimeInput(entry.start), e.target.value)}
-              className="mt-1 block rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm outline-none"
+              className="mt-1 block w-28 rounded-xl border-2 border-ink bg-white px-2 py-2 text-sm outline-none"
             />
           </label>
-          <label className="text-xs font-bold text-ink/60">
+          <label className="shrink-0 text-xs font-bold text-ink/60">
             Logged by
             <input
               value={entry.loggedBy ?? ''}
               onChange={(e) => store.updateEntry(entry.id, { loggedBy: e.target.value })}
               placeholder="Name"
-              className="mt-1 block w-28 rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm outline-none placeholder:text-ink/35"
+              className="mt-1 block w-20 rounded-xl border-2 border-ink bg-white px-2 py-2 text-sm outline-none placeholder:text-ink/35"
             />
           </label>
           <button
@@ -138,9 +138,11 @@ export function EntryRow({ entry, project, store }: EntryRowProps) {
                 store.deleteEntry(entry.id)
               }
             }}
-            className="ml-auto flex items-center gap-1.5 rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm font-bold text-magenta hover:bg-pink-soft"
+            aria-label="Delete entry"
+            title="Delete entry"
+            className="ml-auto shrink-0 rounded-full border-2 border-ink bg-white p-2 text-magenta hover:bg-pink-soft"
           >
-            <Trash2 className="h-4 w-4" /> Delete
+            <Trash2 className="h-4 w-4" />
           </button>
         </div>
       )}
