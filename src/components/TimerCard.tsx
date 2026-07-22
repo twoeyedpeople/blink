@@ -135,7 +135,7 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
 
       <button
         onClick={() => setAdding(true)}
-        className="btn-press mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-ink bg-white py-3 font-display text-sm font-bold hover:bg-pink-soft"
+        className="btn-press mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-ink bg-orange py-3 font-display text-sm font-bold text-white shadow-hard-sm hover:brightness-95"
       >
         <Plus className="h-4 w-4" /> Add entry
       </button>
