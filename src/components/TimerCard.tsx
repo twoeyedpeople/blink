@@ -1,8 +1,9 @@
-import { ChevronDown, Square } from 'lucide-react'
+import { ChevronDown, Plus, Square } from 'lucide-react'
 import { useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { billedMinutes, formatBilled, formatClock, formatTime } from '../lib/time'
 import { load, save } from '../lib/storage'
+import { AddEntryModal } from './AddEntryModal'
 
 interface TimerCardProps {
   store: Store
@@ -19,6 +20,7 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
     return active.some((p) => p.id === lastId) ? lastId : ''
   })
   const [description, setDescription] = useState('')
+  const [adding, setAdding] = useState(false)
 
   const pickProject = (id: string) => {
     setProjectId(id)
@@ -130,6 +132,22 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
       <p className="mt-4 text-center text-xs font-medium text-ink/50">
         Minimum billing unit is 30 minutes. Time rounds up.
       </p>
+
+      <button
+        onClick={() => setAdding(true)}
+        className="btn-press mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-ink bg-white py-3 font-display text-sm font-bold hover:bg-pink-soft"
+      >
+        <Plus className="h-4 w-4" /> Add entry
+      </button>
+
+      {adding && (
+        <AddEntryModal
+          projects={projects}
+          defaultProjectId={projectId}
+          onAdd={(input) => store.addManualEntry({ ...input, loggedBy: userName })}
+          onClose={() => setAdding(false)}
+        />
+      )}
     </section>
   )
 }

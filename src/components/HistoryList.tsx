@@ -1,15 +1,12 @@
-import { ChevronLeft, ChevronRight, Download, Plus } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { addMonths, format, isSameMonth, startOfMonth } from 'date-fns'
 import type { Store } from '../hooks/useStore'
 import { billedMinutes, formatBilled, toDateInput, toTimeInput } from '../lib/time'
-import { load } from '../lib/storage'
 import { EntryRow } from './EntryRow'
-import { AddEntryModal } from './AddEntryModal'
 
-export function HistoryList({ store, userName }: { store: Store; userName: string }) {
+export function HistoryList({ store }: { store: Store }) {
   const [month, setMonth] = useState(() => startOfMonth(new Date()))
-  const [adding, setAdding] = useState(false)
   const { entries, projects } = store
 
   const monthEntries = useMemo(
@@ -90,34 +87,15 @@ export function HistoryList({ store, userName }: { store: Store; userName: strin
             <ChevronRight className="h-4 w-4" />
           </button>
         </div>
-        <div className="flex items-center gap-2">
+        {monthEntries.length > 0 && (
           <button
-            onClick={() => setAdding(true)}
-            className="flex items-center gap-2 rounded-full border-2 border-ink bg-green px-4 py-2 text-sm font-bold hover:brightness-95"
+            onClick={exportCsv}
+            className="flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold hover:bg-pink-soft"
           >
-            <Plus className="h-4 w-4" /> Add entry
+            <Download className="h-4 w-4" /> Export CSV
           </button>
-          {monthEntries.length > 0 && (
-            <button
-              onClick={exportCsv}
-              className="flex items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold hover:bg-pink-soft"
-            >
-              <Download className="h-4 w-4" /> Export CSV
-            </button>
-          )}
-        </div>
+        )}
       </div>
-
-      {adding && (
-        <AddEntryModal
-          projects={projects}
-          defaultProjectId={load('lastProjectId', '')}
-          onAdd={({ projectId, description, date, hours }) =>
-            store.addManualEntry({ projectId, description, date, hours, loggedBy: userName })
-          }
-          onClose={() => setAdding(false)}
-        />
-      )}
 
       <div className="mt-5 rounded-2xl border-2 border-ink bg-pink-soft p-5">
         <p className="font-display text-4xl font-black">{formatBilled(totalBilled)}</p>

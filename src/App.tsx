@@ -76,7 +76,7 @@ export default function App() {
       {route === '/projects' ? (
         <ProjectsPage store={store} />
       ) : route === '/history' ? (
-        <HistoryList store={store} userName={userName} />
+        <HistoryList store={store} />
       ) : (
         <TimerCard store={store} now={now} onNavigate={navigate} userName={userName} />
       )}
