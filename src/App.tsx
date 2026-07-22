@@ -29,6 +29,12 @@ export default function App() {
   const [route, setRoute] = useState(currentRoute)
   const [userName, setUserName] = useUserName()
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [settingsRequired, setSettingsRequired] = useState(false)
+
+  const openSettings = (required = false) => {
+    setSettingsRequired(required)
+    setSettingsOpen(true)
+  }
 
   useEffect(() => {
     const onHash = () => setRoute(currentRoute())
@@ -57,7 +63,7 @@ export default function App() {
       <Header
         route={route}
         onNavigate={navigate}
-        onOpenSettings={() => setSettingsOpen(true)}
+        onOpenSettings={() => openSettings(false)}
         hasName={!!userName}
       />
 
@@ -78,7 +84,13 @@ export default function App() {
       ) : route === '/history' ? (
         <HistoryList store={store} />
       ) : (
-        <TimerCard store={store} now={now} onNavigate={navigate} userName={userName} />
+        <TimerCard
+          store={store}
+          now={now}
+          onNavigate={navigate}
+          userName={userName}
+          onRequireName={() => openSettings(true)}
+        />
       )}
 
       {recovery && (
@@ -111,6 +123,7 @@ export default function App() {
       {settingsOpen && (
         <SettingsModal
           name={userName}
+          required={settingsRequired}
           onSave={(n) => {
             setUserName(n)
             setSettingsOpen(false)

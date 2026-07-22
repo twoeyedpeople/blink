@@ -12,9 +12,10 @@ interface TimerCardProps {
   now: number
   onNavigate: (route: string) => void
   userName: string
+  onRequireName: () => void
 }
 
-export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) {
+export function TimerCard({ store, now, onNavigate, userName, onRequireName }: TimerCardProps) {
   const { projects, running, start, stop, updateRunning } = store
   const active = projects.filter((p) => !p.archived)
   const [projectId, setProjectId] = useState(() => {
@@ -67,7 +68,7 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
           <span className="text-sm text-ink/60">started {formatTime(running.start)}</span>
         </div>
 
-        <p className="mt-8 text-center font-display text-7xl font-black tabular-nums tracking-tight sm:text-8xl">
+        <p className="mt-8 w-full text-center font-display text-6xl font-black tabular-nums sm:text-7xl">
           {formatClock(elapsed)}
         </p>
         <p className="mt-2 text-center text-sm font-medium text-ink/60">
@@ -130,6 +131,10 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
       <button
         disabled={!projectId}
         onClick={() => {
+          if (!userName) {
+            onRequireName()
+            return
+          }
           start(projectId, description, userName)
           setDescription('')
         }}
@@ -146,11 +151,18 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
         </span>
       </button>
       <p className="mt-4 text-center text-xs font-medium text-ink/50">
-        Minimum billing unit is 15 minutes. Time rounds up.
+        <span className="block sm:inline">Minimum billing unit is 15 minutes.</span>{' '}
+        <span className="block sm:inline">Time rounds up.</span>
       </p>
 
       <button
-        onClick={() => setAdding(true)}
+        onClick={() => {
+          if (!userName) {
+            onRequireName()
+            return
+          }
+          setAdding(true)
+        }}
         className="btn-press mt-4 flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-ink bg-orange py-3 font-display text-sm font-bold text-white shadow-hard-sm hover:brightness-95"
       >
         <Plus className="h-4 w-4" /> Add entry

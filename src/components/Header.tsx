@@ -22,7 +22,7 @@ function Brand({ onNavigate }: { onNavigate: (route: string) => void }) {
       </div>
       <div>
         <h1 className="font-serif text-[27px] leading-none">Blink</h1>
-        <p className="mt-0.5 font-serif text-xs tracking-normal text-ink/60">
+        <p className="mt-0.5 text-xs font-medium tracking-normal text-ink/60">
           One eye on the time
         </p>
       </div>

@@ -3,11 +3,12 @@ import { useState } from 'react'
 
 interface SettingsModalProps {
   name: string
+  required?: boolean
   onSave: (name: string) => void
   onClose: () => void
 }
 
-export function SettingsModal({ name, onSave, onClose }: SettingsModalProps) {
+export function SettingsModal({ name, required, onSave, onClose }: SettingsModalProps) {
   const [value, setValue] = useState(name)
 
   return (
@@ -19,6 +20,11 @@ export function SettingsModal({ name, onSave, onClose }: SettingsModalProps) {
             <X className="h-5 w-5" />
           </button>
         </div>
+        {required && (
+          <p className="mt-3 rounded-xl bg-pink-soft px-3 py-2 text-sm font-bold text-magenta">
+            Add your name before logging time.
+          </p>
+        )}
 
         <label className="mt-6 block text-sm font-bold text-ink/60">
           Your name
