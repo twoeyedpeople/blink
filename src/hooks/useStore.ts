@@ -48,8 +48,8 @@ export function useStore() {
     setProjects((p) => p.filter((proj) => proj.id !== id))
   }, [])
 
-  const start = useCallback((projectId: string, description: string) => {
-    setRunning({ projectId, description, start: Date.now() })
+  const start = useCallback((projectId: string, description: string, loggedBy?: string) => {
+    setRunning({ projectId, description, start: Date.now(), ...(loggedBy ? { loggedBy } : {}) })
     save('lastSeen', Date.now())
   }, [])
 
@@ -71,6 +71,7 @@ export function useStore() {
       start: r.start,
       end,
       ...(autoStopped ? { autoStopped: true } : {}),
+      ...(r.loggedBy ? { loggedBy: r.loggedBy } : {}),
     }
     setEntries((e) => [entry, ...e])
     return { saved: true, entry }
@@ -83,6 +84,24 @@ export function useStore() {
   const deleteEntry = useCallback((id: string) => {
     setEntries((e) => e.filter((en) => en.id !== id))
   }, [])
+
+  const addManualEntry = useCallback(
+    (input: { projectId: string; description: string; date: string; hours: number; loggedBy?: string }) => {
+      const start = new Date(`${input.date}T12:00`).getTime()
+      const end = start + input.hours * 3600_000
+      const entry: Entry = {
+        id: crypto.randomUUID(),
+        projectId: input.projectId,
+        description: input.description,
+        start,
+        end,
+        manual: true,
+        ...(input.loggedBy ? { loggedBy: input.loggedBy } : {}),
+      }
+      setEntries((e) => [entry, ...e])
+    },
+    [],
+  )
 
   const replaceAll = useCallback(
     (data: { projects: Project[]; entries: Entry[]; prefs: Prefs; running: Running | null }) => {
@@ -108,6 +127,7 @@ export function useStore() {
     stop,
     updateEntry,
     deleteEntry,
+    addManualEntry,
     replaceAll,
   }
 }

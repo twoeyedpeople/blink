@@ -3,10 +3,12 @@ import { useEffect, useState } from 'react'
 import { Header } from './components/Header'
 import { TimerCard } from './components/TimerCard'
 import { HistoryList } from './components/HistoryList'
+import { SettingsModal } from './components/SettingsModal'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { useStore } from './hooks/useStore'
 import { useIdleGuard } from './hooks/useIdleGuard'
 import { useCloudSync } from './hooks/useCloudSync'
+import { useUserName } from './hooks/useUserName'
 import { formatTime } from './lib/time'
 
 function currentRoute() {
@@ -25,6 +27,8 @@ export default function App() {
   const { now, notice, dismissNotice, recovery, resolveRecovery } = useIdleGuard(store)
   const syncStatus = useCloudSync(store)
   const [route, setRoute] = useState(currentRoute)
+  const [userName, setUserName] = useUserName()
+  const [settingsOpen, setSettingsOpen] = useState(false)
 
   useEffect(() => {
     const onHash = () => setRoute(currentRoute())
@@ -50,7 +54,12 @@ export default function App() {
 
   return (
     <div className="mx-auto min-h-screen max-w-3xl px-4 pb-16">
-      <Header route={route} onNavigate={navigate} />
+      <Header
+        route={route}
+        onNavigate={navigate}
+        onOpenSettings={() => setSettingsOpen(true)}
+        hasName={!!userName}
+      />
 
       {notice && (
         <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border-2 border-ink bg-magenta px-5 py-3 text-white shadow-hard-sm">
@@ -67,9 +76,9 @@ export default function App() {
       {route === '/projects' ? (
         <ProjectsPage store={store} />
       ) : route === '/history' ? (
-        <HistoryList store={store} />
+        <HistoryList store={store} userName={userName} />
       ) : (
-        <TimerCard store={store} now={now} onNavigate={navigate} />
+        <TimerCard store={store} now={now} onNavigate={navigate} userName={userName} />
       )}
 
       {recovery && (
@@ -97,6 +106,17 @@ export default function App() {
             </div>
           </div>
         </div>
+      )}
+
+      {settingsOpen && (
+        <SettingsModal
+          name={userName}
+          onSave={(n) => {
+            setUserName(n)
+            setSettingsOpen(false)
+          }}
+          onClose={() => setSettingsOpen(false)}
+        />
       )}
 
       <footer className="mt-12 flex items-center justify-center gap-2 text-xs text-ink/40">

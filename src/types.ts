@@ -13,12 +13,15 @@ export interface Entry {
   start: number
   end: number
   autoStopped?: boolean
+  manual?: boolean
+  loggedBy?: string
 }
 
 export interface Running {
   projectId: string
   description: string
   start: number
+  loggedBy?: string
 }
 
 export interface Prefs {

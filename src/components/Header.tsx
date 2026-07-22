@@ -1,9 +1,13 @@
+import { Settings } from 'lucide-react'
+
 interface HeaderProps {
   route: string
   onNavigate: (route: string) => void
+  onOpenSettings: () => void
+  hasName: boolean
 }
 
-export function Header({ route, onNavigate }: HeaderProps) {
+export function Header({ route, onNavigate, onOpenSettings, hasName }: HeaderProps) {
   const tabs = [
     { id: '/', label: 'Timer' },
     { id: '/projects', label: 'Projects' },
@@ -38,11 +42,19 @@ export function Header({ route, onNavigate }: HeaderProps) {
           </button>
         ))}
       </nav>
-      <img
-        src="/Logo_black.png"
-        alt="Two-Eyed People"
-        className="hidden h-[27px] justify-self-end md:block"
-      />
+      <div className="flex items-center gap-3 justify-self-end">
+        <button
+          onClick={onOpenSettings}
+          aria-label="Settings"
+          className="relative rounded-full border-2 border-ink bg-white p-2 hover:bg-pink-soft"
+        >
+          <Settings className="h-4 w-4" />
+          {!hasName && (
+            <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-orange" />
+          )}
+        </button>
+        <img src="/Logo_black.png" alt="Two-Eyed People" className="hidden h-[27px] md:block" />
+      </div>
     </header>
   )
 }

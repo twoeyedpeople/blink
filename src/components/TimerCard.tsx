@@ -2,18 +2,28 @@ import { ChevronDown, Square } from 'lucide-react'
 import { useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { billedMinutes, formatBilled, formatClock, formatTime } from '../lib/time'
+import { load, save } from '../lib/storage'
 
 interface TimerCardProps {
   store: Store
   now: number
   onNavigate: (route: string) => void
+  userName: string
 }
 
-export function TimerCard({ store, now, onNavigate }: TimerCardProps) {
+export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) {
   const { projects, running, start, stop, updateRunning } = store
   const active = projects.filter((p) => !p.archived)
-  const [projectId, setProjectId] = useState('')
+  const [projectId, setProjectId] = useState(() => {
+    const lastId = load('lastProjectId', '')
+    return active.some((p) => p.id === lastId) ? lastId : ''
+  })
   const [description, setDescription] = useState('')
+
+  const pickProject = (id: string) => {
+    setProjectId(id)
+    save('lastProjectId', id || null)
+  }
 
   const runningProject = running ? projects.find((p) => p.id === running.projectId) : null
   const elapsed = running ? now - running.start : 0
@@ -87,7 +97,7 @@ export function TimerCard({ store, now, onNavigate }: TimerCardProps) {
       <div className="relative">
         <select
           value={projectId}
-          onChange={(e) => setProjectId(e.target.value)}
+          onChange={(e) => pickProject(e.target.value)}
           className="w-full appearance-none rounded-2xl border-2 border-ink bg-white px-5 py-4 font-display text-lg font-bold outline-none focus:bg-pink-soft"
         >
           <option value="">Pick a project…</option>
@@ -110,7 +120,7 @@ export function TimerCard({ store, now, onNavigate }: TimerCardProps) {
       <button
         disabled={!projectId}
         onClick={() => {
-          start(projectId, description)
+          start(projectId, description, userName)
           setDescription('')
         }}
         className="btn-press mt-5 w-full rounded-3xl border-2 border-ink bg-green py-10 font-display text-6xl font-black shadow-hard disabled:cursor-not-allowed disabled:opacity-40 sm:text-7xl"

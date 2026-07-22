@@ -1,4 +1,4 @@
-import { Pencil, Trash2, X, Zap } from 'lucide-react'
+import { Pencil, PencilLine, Trash2, X, Zap } from 'lucide-react'
 import { useState } from 'react'
 import type { Entry, Project } from '../types'
 import type { Store } from '../hooks/useStore'
@@ -59,6 +59,12 @@ export function EntryRow({ entry, project, store }: EntryRowProps) {
                 <Zap className="h-3 w-3" /> auto-stopped
               </span>
             )}
+            {entry.manual && (
+              <span className="inline-flex items-center gap-1 rounded-full bg-pink-soft px-2 py-0.5 text-xs font-bold text-blue">
+                <PencilLine className="h-3 w-3" /> manual
+              </span>
+            )}
+            {entry.loggedBy && <span className="text-ink/40">· logged by {entry.loggedBy}</span>}
           </p>
         </div>
         <div className="text-right">
