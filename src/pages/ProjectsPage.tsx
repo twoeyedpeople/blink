@@ -1,4 +1,4 @@
-import { Archive, ArchiveRestore, FileSpreadsheet, Plus, Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore, ChevronDown, FileSpreadsheet, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { PROJECT_COLOURS } from '../types'
@@ -124,16 +124,19 @@ export function ProjectsPage({ store }: { store: Store }) {
         <div className="mt-4 flex flex-wrap items-center gap-4">
           <label className="text-sm font-bold">
             Consider me idle after
-            <select
-              value={prefs.idleMinutes}
-              onChange={(e) => setPrefs({ ...prefs, idleMinutes: Number(e.target.value) })}
-              className="ml-2 rounded-xl border-2 border-ink bg-white px-3 py-2 text-sm font-bold outline-none"
-            >
-              <option value={5}>5 minutes</option>
-              <option value={10}>10 minutes</option>
-              <option value={15}>15 minutes</option>
-              <option value={30}>30 minutes</option>
-            </select>
+            <span className="relative ml-2 inline-block">
+              <select
+                value={prefs.idleMinutes}
+                onChange={(e) => setPrefs({ ...prefs, idleMinutes: Number(e.target.value) })}
+                className="appearance-none rounded-xl border-2 border-ink bg-white py-2 pl-3 pr-8 text-sm font-bold outline-none"
+              >
+                <option value={5}>5 minutes</option>
+                <option value={10}>10 minutes</option>
+                <option value={15}>15 minutes</option>
+                <option value={30}>30 minutes</option>
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2" />
+            </span>
           </label>
           {prefs.smartIdle ? (
             <button
