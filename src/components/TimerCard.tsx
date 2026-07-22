@@ -3,6 +3,8 @@ import { useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { billedMinutes, formatBilled, formatClock, formatTime } from '../lib/time'
 import { load, save } from '../lib/storage'
+import { randomStartPhrase } from '../lib/startPhrases'
+import { useFitText } from '../hooks/useFitText'
 import { AddEntryModal } from './AddEntryModal'
 
 interface TimerCardProps {
@@ -21,6 +23,8 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
   })
   const [description, setDescription] = useState('')
   const [adding, setAdding] = useState(false)
+  const [startLabel] = useState(randomStartPhrase)
+  const { ref: startTextRef, fontSize: startFontSize } = useFitText(startLabel, 72, 28)
 
   const pickProject = (id: string) => {
     setProjectId(id)
@@ -34,7 +38,7 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
     return (
       <section className="rounded-3xl border-2 border-ink bg-white p-8 text-center shadow-hard">
         <h2 className="font-display text-2xl font-black">No projects yet</h2>
-        <p className="mt-2 text-ink/60">Add a project first, then hit START.</p>
+        <p className="mt-2 text-ink/60">Add a project first, then get going.</p>
         <button
           onClick={() => onNavigate('/projects')}
           className="btn-press mt-6 rounded-full border-2 border-ink bg-blue px-8 py-3 font-display text-lg font-black text-white shadow-hard-sm"
@@ -125,9 +129,15 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
           start(projectId, description, userName)
           setDescription('')
         }}
-        className="btn-press mt-5 w-full rounded-3xl border-2 border-ink bg-green py-10 font-display text-6xl font-black shadow-hard disabled:cursor-not-allowed disabled:opacity-40 sm:text-7xl"
+        className="btn-press mt-5 w-full overflow-hidden rounded-3xl border-2 border-ink bg-green py-10 shadow-hard disabled:cursor-not-allowed disabled:opacity-40"
       >
-        START
+        <span
+          ref={startTextRef}
+          style={{ fontSize: `${startFontSize}px` }}
+          className="block whitespace-nowrap px-4 font-display font-black leading-none"
+        >
+          {startLabel}
+        </span>
       </button>
       <p className="mt-4 text-center text-xs font-medium text-ink/50">
         Minimum billing unit is 15 minutes. Time rounds up.
