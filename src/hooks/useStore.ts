@@ -26,15 +26,16 @@ export function useStore() {
   useEffect(() => save('running', running), [running])
   useEffect(() => save('prefs', prefs), [prefs])
 
-  const addProject = useCallback((name: string): Project | null => {
+  const addProject = useCallback((name: string, hourlyRate: number): Project | null => {
     const trimmed = name.trim()
-    if (!trimmed) return null
+    if (!trimmed || !(hourlyRate > 0)) return null
     const project: Project = {
       id: crypto.randomUUID(),
       name: trimmed,
       colour: PROJECT_COLOURS[projects.length % PROJECT_COLOURS.length],
       archived: false,
       createdAt: Date.now(),
+      hourlyRate,
     }
     setProjects((p) => [...p, project])
     return project

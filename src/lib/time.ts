@@ -10,18 +10,20 @@ export function formatBilled(mins: number): string {
   return Number.isInteger(h) ? `${h}h` : `${parseFloat(h.toFixed(2))}h`
 }
 
-// Standard rate used for the Billings dollar figure. Every billed block is a
-// multiple of 15 minutes, so this always comes out to a whole dollar amount.
-export const HOURLY_RATE = 200
-
+// Rate is per-project, not a flat platform-wide number, so this always takes
+// the project's own hourlyRate rather than assuming one.
 const currencyFormatter = new Intl.NumberFormat('en-AU', {
   style: 'currency',
   currency: 'AUD',
   maximumFractionDigits: 0,
 })
 
-export function formatBilledDollars(mins: number): string {
-  return currencyFormatter.format((mins / 60) * HOURLY_RATE)
+export function dollarsForMinutes(mins: number, hourlyRate: number): number {
+  return (mins / 60) * hourlyRate
+}
+
+export function formatDollars(amount: number): string {
+  return currencyFormatter.format(amount)
 }
 
 // 01:23:45 style ticking clock

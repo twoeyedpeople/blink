@@ -2,14 +2,7 @@ import { ChevronDown, ChevronLeft, ChevronRight, Download } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { addMonths, format, isSameMonth, startOfMonth } from 'date-fns'
 import type { Store } from '../hooks/useStore'
-import {
-  billedMinutes,
-  formatBilled,
-  formatBilledDollars,
-  HOURLY_RATE,
-  toDateInput,
-  toTimeInput,
-} from '../lib/time'
+import { billedMinutes, dollarsForMinutes, formatBilled, formatDollars, toDateInput, toTimeInput } from '../lib/time'
 import { EntryRow } from './EntryRow'
 
 export function HistoryList({ store }: { store: Store }) {
@@ -30,6 +23,13 @@ export function HistoryList({ store }: { store: Store }) {
   )
 
   const totalBilled = monthEntries.reduce((sum, e) => sum + billedMinutes(e.end - e.start), 0)
+
+  const totalDollars = monthEntries.reduce((sum, e) => {
+    const rate = projects.find((p) => p.id === e.projectId)?.hourlyRate ?? 0
+    return sum + dollarsForMinutes(billedMinutes(e.end - e.start), rate)
+  }, 0)
+
+  const filteredProject = projectFilter === 'all' ? null : projects.find((p) => p.id === projectFilter)
 
   const byDay = useMemo(() => {
     const groups: { day: string; label: string; items: typeof monthEntries }[] = []
@@ -125,13 +125,12 @@ export function HistoryList({ store }: { store: Store }) {
         <div className="flex flex-wrap items-baseline gap-x-3">
           <p className="font-display text-4xl font-black">{formatBilled(totalBilled)}</p>
           <p className="font-display text-2xl font-black text-magenta">
-            {formatBilledDollars(totalBilled)}
+            {formatDollars(totalDollars)}
           </p>
         </div>
         <p className="text-sm font-medium text-ink/60">
-          billed this month{projectFilter !== 'all' ? ' · ' + (projects.find((p) => p.id === projectFilter)?.name ?? '') : ''}
-          {' '}
-          · ${HOURLY_RATE}/hr
+          billed this month{filteredProject ? ' · ' + filteredProject.name : ''}
+          {filteredProject ? ` · $${filteredProject.hourlyRate}/hr` : ''}
         </p>
       </div>
 
