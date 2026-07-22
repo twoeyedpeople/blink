@@ -21,19 +21,27 @@ export function useFitText(text: string, maxPx: number, minPx: number, options?:
     if (!el) return
 
     const fit = () => {
-      if (window.innerWidth < wrapBelowPx) {
-        setWrap(true)
-        setFontSize(wrapFontPx)
-        return
-      }
-      setWrap(false)
+      // Always try shrinking to one line first, regardless of the viewport
+      // heuristic below, so a wrong or stale innerWidth reading can never
+      // result in clipped text: if it truly fits at some size, use that.
       let size = maxPx
+      el.style.whiteSpace = 'nowrap'
       el.style.fontSize = `${size}px`
       while (el.scrollWidth > el.clientWidth && size > minPx) {
         size -= stepPx
         el.style.fontSize = `${size}px`
       }
-      setFontSize(size)
+      const fitsOneLine = el.scrollWidth <= el.clientWidth
+      const preferWrap = window.innerWidth < wrapBelowPx
+      el.style.whiteSpace = '' // let the whitespace-normal/nowrap class (not this inline override) decide
+
+      if (preferWrap || !fitsOneLine) {
+        setWrap(true)
+        setFontSize(preferWrap ? wrapFontPx : Math.max(size, minPx))
+      } else {
+        setWrap(false)
+        setFontSize(size)
+      }
     }
 
     fit()
