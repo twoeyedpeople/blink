@@ -15,11 +15,11 @@ export function Header({ route, onNavigate }: HeaderProps) {
         onClick={() => onNavigate('/')}
         className="flex items-center gap-3 text-left"
       >
-        <div className="flex h-14 w-14 items-center justify-center rounded-2xl border-2 border-ink bg-white shadow-hard-sm">
-          <img src="/Icon.png" alt="" className="h-9 w-9" />
+        <div className="flex h-[42px] w-[42px] items-center justify-center rounded-2xl border-2 border-ink bg-white shadow-hard-sm">
+          <img src="/Icon.png" alt="" className="h-[27px] w-[27px]" />
         </div>
         <div>
-          <h1 className="font-serif text-4xl leading-none">Blink</h1>
+          <h1 className="font-serif text-[27px] leading-none">Blink</h1>
           <p className="mt-1 text-xs font-medium tracking-wide text-ink/60">
             The Temporal Tally
           </p>
@@ -39,7 +39,7 @@ export function Header({ route, onNavigate }: HeaderProps) {
             </button>
           ))}
         </nav>
-        <img src="/Logo_black.png" alt="Two-Eyed People" className="hidden h-6 md:block" />
+        <img src="/Logo_black.png" alt="Two-Eyed People" className="hidden h-[18px] md:block" />
       </div>
     </header>
   )
