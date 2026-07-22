@@ -20,7 +20,7 @@ function Brand({ onNavigate }: { onNavigate: (route: string) => void }) {
       <div className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-2xl border-2 border-ink bg-white shadow-hard-sm">
         <img src="/Icon.png" alt="" className="h-[27px] w-[27px]" />
       </div>
-      <h1 className="font-serif text-[27px] leading-none">Blink</h1>
+      <h1 className="font-serif text-[27px] leading-none">blink</h1>
     </button>
   )
 }
@@ -36,7 +36,7 @@ function SettingsButton({
     <button
       onClick={onOpenSettings}
       aria-label="Settings"
-      className="relative shrink-0 rounded-full border-2 border-ink bg-white p-2 hover:bg-pink-soft"
+      className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-white hover:bg-pink-soft"
     >
       <Settings className="h-4 w-4" />
       {!hasName && (
@@ -56,28 +56,32 @@ export function Header({ route, onNavigate, onOpenSettings, hasName }: HeaderPro
 
   return (
     <header className="py-6">
-      {/* Tablet and up: brand, centred nav, settings + TEP logo, all in one row */}
+      {/* Tablet and up: brand, centred nav + settings group, TEP logo, all in one row */}
       <div className="hidden sm:grid sm:grid-cols-3 sm:items-center sm:gap-4">
         <div className="justify-self-start">
           <Brand onNavigate={onNavigate} />
         </div>
-        <nav className="flex justify-self-center rounded-full border-2 border-ink bg-white p-1 shadow-hard-sm">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              onClick={() => onNavigate(t.id)}
-              className={`rounded-full px-4 py-1.5 font-display text-sm font-bold transition-colors ${
-                route === t.id ? 'bg-ink text-white' : 'text-ink hover:bg-pink-soft'
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
-        </nav>
-        <div className="flex items-center gap-3 justify-self-end">
+        <div className="flex items-center gap-3 justify-self-center">
+          <nav className="flex h-11 items-center rounded-full border-2 border-ink bg-white p-1 shadow-hard-sm">
+            {TABS.map((t) => (
+              <button
+                key={t.id}
+                onClick={() => onNavigate(t.id)}
+                className={`rounded-full px-4 py-1.5 font-display text-sm font-bold transition-colors ${
+                  route === t.id ? 'bg-ink text-white' : 'text-ink hover:bg-pink-soft'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </nav>
           <SettingsButton onOpenSettings={onOpenSettings} hasName={hasName} />
-          <img src="/Logo_black.png" alt="Two-Eyed People" className="hidden h-[27px] md:block" />
         </div>
+        <img
+          src="/Logo_black.png"
+          alt="Two-Eyed People"
+          className="hidden h-[27px] justify-self-end md:block"
+        />
       </div>
 
       {/* Mobile: brand left, settings + hamburger right, tabs tuck into a dropdown */}

@@ -40,7 +40,6 @@ export const START_PHRASES = [
   'Go bananas!',
   'Make time!',
   "Clock o'clock!",
-  'To the taskmobile!',
   'Deploy!',
   'Get busy!',
   'Start-a-mundo!',
