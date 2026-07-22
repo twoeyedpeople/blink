@@ -72,13 +72,13 @@ export async function downloadClientReport(project: Project, entries: Entry[]) {
     row.getCell(1).font = { name: 'Arial', size: 11 }
     row.getCell(2).font = { name: 'Arial', size: 11 }
     row.getCell(3).font = { name: 'Arial', size: 11 }
-    row.getCell(3).numFmt = '0.0"h"'
+    row.getCell(3).numFmt = '0.##"h"'
   }
 
   if (projectEntries.length === 0) {
     const emptyRow = sheet.addRow(['—', 'Nothing tracked yet', 0])
     emptyRow.font = { name: 'Arial', italic: true, color: { argb: 'FF999999' } }
-    emptyRow.getCell(3).numFmt = '0.0"h"'
+    emptyRow.getCell(3).numFmt = '0.##"h"'
   }
 
   sheet.addRow([])
@@ -88,7 +88,7 @@ export async function downloadClientReport(project: Project, entries: Entry[]) {
     cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: PINK_SOFT } }
     cell.border = { top: { style: 'medium', color: { argb: INK } } }
   })
-  totalRow.getCell(3).numFmt = '0.0"h"'
+  totalRow.getCell(3).numFmt = '0.##"h"'
 
   const buffer = await workbook.xlsx.writeBuffer()
   const blob = new Blob([buffer], {
