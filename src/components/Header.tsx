@@ -16,11 +16,11 @@ const TABS = [
 
 function Brand({ onNavigate }: { onNavigate: (route: string) => void }) {
   return (
-    <button onClick={() => onNavigate('/')} className="flex items-center gap-3 text-left">
-      <div className="flex h-[42px] w-[42px] shrink-0 items-center justify-center rounded-2xl border-2 border-ink bg-white shadow-hard-sm">
-        <img src="/Icon.png" alt="" className="h-[27px] w-[27px]" />
+    <button onClick={() => onNavigate('/')} className="flex items-center gap-2.5 text-left">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
+        <img src="/Icon.png" alt="" className="h-[22px] w-[22px]" />
       </div>
-      <h1 className="font-serif text-[27px] leading-none">blink</h1>
+      <h1 className="font-serif text-2xl leading-none">blink</h1>
     </button>
   )
 }
@@ -80,7 +80,7 @@ export function Header({ route, onNavigate, onOpenSettings, hasName }: HeaderPro
         <img
           src="/Logo_black.png"
           alt="Two-Eyed People"
-          className="hidden h-[32.4px] justify-self-end md:block"
+          className="hidden h-9 justify-self-end md:block"
         />
       </div>
 
