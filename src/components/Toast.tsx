@@ -24,8 +24,8 @@ export function Toast({ message, onDone }: ToastProps) {
 
   return (
     <div
-      className={`pointer-events-none fixed left-1/2 top-8 z-50 -translate-x-1/2 px-4 transition-all duration-300 ${
-        visible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0'
+      className={`pointer-events-none fixed left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 px-4 transition-all duration-300 ${
+        visible ? 'scale-100 opacity-100' : 'scale-90 opacity-0'
       }`}
     >
       <div className="flex items-center gap-3 rounded-3xl border-2 border-ink bg-yellow px-8 py-5 font-display text-2xl font-black shadow-hard sm:text-3xl">
