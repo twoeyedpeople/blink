@@ -31,16 +31,6 @@ export function HistoryList({ store }: { store: Store }) {
 
   const totalBilled = monthEntries.reduce((sum, e) => sum + billedMinutes(e.end - e.start), 0)
 
-  const byProject = useMemo(() => {
-    const map = new Map<string, number>()
-    for (const e of monthEntries) {
-      map.set(e.projectId, (map.get(e.projectId) ?? 0) + billedMinutes(e.end - e.start))
-    }
-    return [...map.entries()]
-      .map(([projectId, mins]) => ({ project: projects.find((p) => p.id === projectId), mins }))
-      .sort((a, b) => b.mins - a.mins)
-  }, [monthEntries, projects])
-
   const byDay = useMemo(() => {
     const groups: { day: string; label: string; items: typeof monthEntries }[] = []
     for (const e of monthEntries) {
@@ -143,22 +133,6 @@ export function HistoryList({ store }: { store: Store }) {
           {' '}
           · ${HOURLY_RATE}/hr
         </p>
-        {projectFilter === 'all' && byProject.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
-            {byProject.map(({ project, mins }) => (
-              <span
-                key={project?.id ?? 'unknown'}
-                className="inline-flex items-center gap-1.5 rounded-full border-2 border-ink bg-white px-3 py-1 text-sm font-bold"
-              >
-                <span
-                  className="h-2.5 w-2.5 rounded-full"
-                  style={{ backgroundColor: project?.colour ?? '#ccc' }}
-                />
-                {project?.name ?? 'Unknown'} · {formatBilled(mins)} · {formatBilledDollars(mins)}
-              </span>
-            ))}
-          </div>
-        )}
       </div>
 
       {byDay.length === 0 ? (
