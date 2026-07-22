@@ -1,11 +1,12 @@
 import { ChevronDown, Plus, Square } from 'lucide-react'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { billedMinutes, formatBilled, formatClock, formatTime } from '../lib/time'
 import { load, save } from '../lib/storage'
 import { randomStartPhrase } from '../lib/startPhrases'
 import { useFitText } from '../hooks/useFitText'
 import { AddEntryModal } from './AddEntryModal'
+import { Toast } from './Toast'
 
 interface TimerCardProps {
   store: Store
@@ -24,6 +25,7 @@ export function TimerCard({ store, now, onNavigate, userName, onRequireName }: T
   })
   const [description, setDescription] = useState('')
   const [adding, setAdding] = useState(false)
+  const [savedToast, setSavedToast] = useState(false)
   const [startLabel] = useState(randomStartPhrase)
   const {
     ref: startTextRef,
@@ -35,6 +37,8 @@ export function TimerCard({ store, now, onNavigate, userName, onRequireName }: T
     setProjectId(id)
     save('lastProjectId', id || null)
   }
+
+  const dismissToast = useCallback(() => setSavedToast(false), [])
 
   const runningProject = running ? projects.find((p) => p.id === running.projectId) : null
   const elapsed = running ? now - running.start : 0
@@ -172,10 +176,15 @@ export function TimerCard({ store, now, onNavigate, userName, onRequireName }: T
         <AddEntryModal
           projects={projects}
           defaultProjectId={projectId}
-          onAdd={(input) => store.addManualEntry({ ...input, loggedBy: userName })}
+          onAdd={(input) => {
+            store.addManualEntry({ ...input, loggedBy: userName })
+            setSavedToast(true)
+          }}
           onClose={() => setAdding(false)}
         />
       )}
+
+      {savedToast && <Toast message="Record saved" onDone={dismissToast} />}
     </section>
   )
 }
