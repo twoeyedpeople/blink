@@ -87,7 +87,7 @@ export function TimerCard({ store, now, onNavigate, userName, onRequireName }: T
         <input
           value={running.description}
           onChange={(e) => updateRunning({ description: e.target.value })}
-          placeholder="What are you working on?"
+          placeholder="Describe what you are working on"
           className="mt-8 w-full rounded-2xl border-2 border-ink bg-pink-soft px-5 py-4 text-lg outline-none placeholder:text-ink/40 focus:bg-white"
         />
 
@@ -128,7 +128,7 @@ export function TimerCard({ store, now, onNavigate, userName, onRequireName }: T
       <input
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="What are you working on?"
+        placeholder="Describe what you are working on"
         className="mt-4 w-full rounded-2xl border-2 border-ink bg-white px-5 py-4 text-lg outline-none placeholder:text-ink/40 focus:bg-pink-soft"
       />
 

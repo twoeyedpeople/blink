@@ -11,7 +11,7 @@ interface HeaderProps {
 const TABS = [
   { id: '/', label: 'Timer' },
   { id: '/projects', label: 'Projects' },
-  { id: '/history', label: 'History' },
+  { id: '/history', label: 'Billings' },
 ]
 
 function Brand({ onNavigate }: { onNavigate: (route: string) => void }) {

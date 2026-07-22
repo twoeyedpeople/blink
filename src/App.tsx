@@ -71,7 +71,7 @@ export default function App() {
         <div className="mb-6 flex items-center justify-between gap-3 rounded-2xl border-2 border-ink bg-magenta px-5 py-3 text-white shadow-hard-sm">
           <p className="text-sm font-bold">
             Timer auto-stopped at {formatTime(notice.stoppedAt)} because {reasonText}. Check
-            History if it needs a tidy-up.
+            Billings if it needs a tidy-up.
           </p>
           <button onClick={dismissNotice} aria-label="Dismiss" className="shrink-0">
             <X className="h-5 w-5" />

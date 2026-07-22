@@ -2,7 +2,14 @@ import { ChevronDown, ChevronLeft, ChevronRight, Download } from 'lucide-react'
 import { useMemo, useState } from 'react'
 import { addMonths, format, isSameMonth, startOfMonth } from 'date-fns'
 import type { Store } from '../hooks/useStore'
-import { billedMinutes, formatBilled, toDateInput, toTimeInput } from '../lib/time'
+import {
+  billedMinutes,
+  formatBilled,
+  formatBilledDollars,
+  HOURLY_RATE,
+  toDateInput,
+  toTimeInput,
+} from '../lib/time'
 import { EntryRow } from './EntryRow'
 
 export function HistoryList({ store }: { store: Store }) {
@@ -125,9 +132,16 @@ export function HistoryList({ store }: { store: Store }) {
       </div>
 
       <div className="mt-5 rounded-2xl border-2 border-ink bg-pink-soft p-5">
-        <p className="font-display text-4xl font-black">{formatBilled(totalBilled)}</p>
+        <div className="flex flex-wrap items-baseline gap-x-3">
+          <p className="font-display text-4xl font-black">{formatBilled(totalBilled)}</p>
+          <p className="font-display text-2xl font-black text-magenta">
+            {formatBilledDollars(totalBilled)}
+          </p>
+        </div>
         <p className="text-sm font-medium text-ink/60">
           billed this month{projectFilter !== 'all' ? ' · ' + (projects.find((p) => p.id === projectFilter)?.name ?? '') : ''}
+          {' '}
+          · ${HOURLY_RATE}/hr
         </p>
         {projectFilter === 'all' && byProject.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
@@ -140,7 +154,7 @@ export function HistoryList({ store }: { store: Store }) {
                   className="h-2.5 w-2.5 rounded-full"
                   style={{ backgroundColor: project?.colour ?? '#ccc' }}
                 />
-                {project?.name ?? 'Unknown'} · {formatBilled(mins)}
+                {project?.name ?? 'Unknown'} · {formatBilled(mins)} · {formatBilledDollars(mins)}
               </span>
             ))}
           </div>

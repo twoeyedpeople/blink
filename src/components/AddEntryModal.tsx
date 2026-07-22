@@ -52,6 +52,7 @@ export function AddEntryModal({ projects, defaultProjectId, onAdd, onClose }: Ad
         <label className="mt-4 block text-xs font-bold text-ink/60">
           Description
           <input
+            autoFocus
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="What was this?"
@@ -59,8 +60,8 @@ export function AddEntryModal({ projects, defaultProjectId, onAdd, onClose }: Ad
           />
         </label>
 
-        <div className="mt-4 flex gap-3">
-          <label className="flex-1 text-xs font-bold text-ink/60">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
+          <label className="text-xs font-bold text-ink/60 sm:flex-1">
             Date
             <input
               type="date"
@@ -69,7 +70,7 @@ export function AddEntryModal({ projects, defaultProjectId, onAdd, onClose }: Ad
               className="mt-1 w-full rounded-2xl border-2 border-ink bg-white px-4 py-3 outline-none focus:bg-pink-soft"
             />
           </label>
-          <label className="w-32 text-xs font-bold text-ink/60">
+          <label className="text-xs font-bold text-ink/60 sm:w-32">
             Hours
             <input
               type="number"
