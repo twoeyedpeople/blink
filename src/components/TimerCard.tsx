@@ -24,7 +24,11 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
   const [description, setDescription] = useState('')
   const [adding, setAdding] = useState(false)
   const [startLabel] = useState(randomStartPhrase)
-  const { ref: startTextRef, fontSize: startFontSize } = useFitText(startLabel, 72, 28)
+  const {
+    ref: startTextRef,
+    fontSize: startFontSize,
+    wrap: startWraps,
+  } = useFitText(startLabel, 72, 28, { wrapBelowPx: 640, wrapFontPx: 40 })
 
   const pickProject = (id: string) => {
     setProjectId(id)
@@ -134,7 +138,9 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
         <span
           ref={startTextRef}
           style={{ fontSize: `${startFontSize}px` }}
-          className="block whitespace-nowrap px-4 font-display font-black leading-none"
+          className={`block px-4 font-display font-black leading-tight ${
+            startWraps ? 'whitespace-normal text-center' : 'whitespace-nowrap'
+          }`}
         >
           {startLabel}
         </span>

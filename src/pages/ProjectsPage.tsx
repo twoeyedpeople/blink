@@ -45,18 +45,18 @@ export function ProjectsPage({ store }: { store: Store }) {
     <div className="space-y-8">
       <section className="rounded-3xl border-2 border-ink bg-white p-6 shadow-hard sm:p-8">
         <h2 className="font-display text-2xl font-black">Projects</h2>
-        <div className="mt-4 flex gap-3">
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && add()}
             placeholder="New project name…"
-            className="flex-1 rounded-2xl border-2 border-ink bg-white px-5 py-3 text-lg outline-none placeholder:text-ink/40 focus:bg-pink-soft"
+            className="min-w-0 flex-1 rounded-2xl border-2 border-ink bg-white px-5 py-3 text-lg outline-none placeholder:text-ink/40 focus:bg-pink-soft"
           />
           <button
             onClick={add}
             disabled={!name.trim()}
-            className="btn-press flex items-center gap-2 rounded-2xl border-2 border-ink bg-green px-6 py-3 font-display text-lg font-black shadow-hard-sm disabled:cursor-not-allowed disabled:opacity-40"
+            className="btn-press flex items-center justify-center gap-2 rounded-2xl border-2 border-ink bg-green px-6 py-3 font-display text-lg font-black shadow-hard-sm disabled:cursor-not-allowed disabled:opacity-40"
           >
             <Plus className="h-5 w-5" /> ADD
           </button>
