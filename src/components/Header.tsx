@@ -6,6 +6,7 @@ interface HeaderProps {
 export function Header({ route, onNavigate }: HeaderProps) {
   const tabs = [
     { id: '/', label: 'Timer' },
+    { id: '/history', label: 'History' },
     { id: '/projects', label: 'Projects' },
   ]
   return (
