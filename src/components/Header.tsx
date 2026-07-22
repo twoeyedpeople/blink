@@ -20,7 +20,7 @@ export function Header({ route, onNavigate }: HeaderProps) {
         </div>
         <div>
           <h1 className="font-serif text-[27px] leading-none">Blink</h1>
-          <p className="mt-1 text-xs font-medium tracking-normal text-ink/60">
+          <p className="mt-0.5 text-xs font-medium tracking-normal text-ink/60">
             An eye on the time
           </p>
         </div>
@@ -41,7 +41,7 @@ export function Header({ route, onNavigate }: HeaderProps) {
       <img
         src="/Logo_black.png"
         alt="Two-Eyed People"
-        className="hidden h-9 justify-self-end md:block"
+        className="hidden h-[27px] justify-self-end md:block"
       />
     </header>
   )
