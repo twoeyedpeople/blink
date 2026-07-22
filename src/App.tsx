@@ -134,9 +134,9 @@ export default function App() {
 
       <footer className="mt-12 flex flex-wrap items-center justify-center gap-2 text-xs text-ink/40">
         <span>© Two-Eyed People Pty Ltd</span>
-        <span aria-hidden>·</span>
-        <span>Blink - one eye on the time</span>
-        <span aria-hidden>-</span>
+        <span aria-hidden>|</span>
+        <span>Blink: One eye on the time</span>
+        <span aria-hidden>|</span>
         <span className="inline-flex items-center gap-1">
           {syncStatus === 'offline' ? (
             <CloudOff className="h-3 w-3" />
