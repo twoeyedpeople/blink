@@ -1,4 +1,4 @@
-import { X } from 'lucide-react'
+import { CloudOff, RefreshCw, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Header } from './components/Header'
 import { TimerCard } from './components/TimerCard'
@@ -6,15 +6,24 @@ import { HistoryList } from './components/HistoryList'
 import { ProjectsPage } from './pages/ProjectsPage'
 import { useStore } from './hooks/useStore'
 import { useIdleGuard } from './hooks/useIdleGuard'
+import { useCloudSync } from './hooks/useCloudSync'
 import { formatTime } from './lib/time'
 
 function currentRoute() {
   return window.location.hash.replace('#', '') || '/'
 }
 
+const SYNC_LABEL = {
+  connecting: 'Connecting…',
+  synced: 'Synced',
+  saving: 'Saving…',
+  offline: 'Offline — saved on this device only',
+}
+
 export default function App() {
   const store = useStore()
   const { now, notice, dismissNotice, recovery, resolveRecovery } = useIdleGuard(store)
+  const syncStatus = useCloudSync(store)
   const [route, setRoute] = useState(currentRoute)
 
   useEffect(() => {
@@ -92,7 +101,16 @@ export default function App() {
       )}
 
       <footer className="mt-12 flex items-center justify-center gap-2 text-xs text-ink/40">
-        <span>Blink · a Two-Eyed People tool · data lives in this browser</span>
+        <span>Blink · a Two-Eyed People tool</span>
+        <span aria-hidden>·</span>
+        <span className="inline-flex items-center gap-1">
+          {syncStatus === 'offline' ? (
+            <CloudOff className="h-3 w-3" />
+          ) : (
+            <RefreshCw className={`h-3 w-3 ${syncStatus === 'saving' ? 'animate-spin' : ''}`} />
+          )}
+          {SYNC_LABEL[syncStatus]}
+        </span>
       </footer>
     </div>
   )

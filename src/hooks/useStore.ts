@@ -84,6 +84,16 @@ export function useStore() {
     setEntries((e) => e.filter((en) => en.id !== id))
   }, [])
 
+  const replaceAll = useCallback(
+    (data: { projects: Project[]; entries: Entry[]; prefs: Prefs; running: Running | null }) => {
+      setProjects(data.projects)
+      setEntries(data.entries)
+      setPrefs(data.prefs)
+      setRunning(data.running)
+    },
+    [],
+  )
+
   return {
     projects,
     entries,
@@ -98,6 +108,7 @@ export function useStore() {
     stop,
     updateEntry,
     deleteEntry,
+    replaceAll,
   }
 }
 

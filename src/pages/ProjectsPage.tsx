@@ -1,7 +1,8 @@
-import { Archive, ArchiveRestore, Plus, Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore, FileSpreadsheet, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { PROJECT_COLOURS } from '../types'
+import { downloadClientReport } from '../lib/clientReport'
 
 export function ProjectsPage({ store }: { store: Store }) {
   const [name, setName] = useState('')
@@ -86,6 +87,13 @@ export function ProjectsPage({ store }: { store: Store }) {
                 {p.archived && (
                   <span className="text-xs font-bold uppercase text-ink/50">archived</span>
                 )}
+                <button
+                  onClick={() => downloadClientReport(p, entries)}
+                  className="rounded-full border-2 border-ink p-2 hover:bg-pink-soft"
+                  title="Download client report (XLSX)"
+                >
+                  <FileSpreadsheet className="h-4 w-4" />
+                </button>
                 <button
                   onClick={() => store.updateProject(p.id, { archived: !p.archived })}
                   className="rounded-full border-2 border-ink p-2 hover:bg-pink-soft"

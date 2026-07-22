@@ -1,0 +1,40 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isValidProject(data) {
+      return data.name is string &&
+             data.name.size() > 0 &&
+             data.clientName is string &&
+             data.tasks is list &&
+             data.createdAt is number &&
+             data.updatedAt is number;
+    }
+
+    match /projects/{projectId} {
+      // Prototype mode: public read/write for shared timelines, but enforce shape and doc ID.
+      allow read: if true;
+      allow create, update: if isValidProject(request.resource.data) &&
+                             request.resource.data.id == projectId;
+      allow delete: if true;
+    }
+
+    match /people/{personId} {
+      allow read, write: if true;
+    }
+
+    // Blink (time tracker) workspace document. Same prototype-mode pattern as above:
+    // no auth, shape-validated. Single-tenant internal tool, one doc holds all state.
+    function isValidBlinkWorkspace(data) {
+      return data.projects is list &&
+             data.entries is list &&
+             data.prefs is map &&
+             data.updatedAt is number;
+    }
+
+    match /blink/{docId} {
+      allow read: if true;
+      allow write: if isValidBlinkWorkspace(request.resource.data);
+    }
+  }
+}
