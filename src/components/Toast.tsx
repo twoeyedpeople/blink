@@ -28,7 +28,7 @@ export function Toast({ message, onDone }: ToastProps) {
         visible ? 'translate-y-0 opacity-100' : '-translate-y-2 opacity-0'
       }`}
     >
-      <div className="flex items-center gap-3 rounded-3xl border-2 border-ink bg-green px-8 py-5 font-display text-2xl font-black shadow-hard sm:text-3xl">
+      <div className="flex items-center gap-3 rounded-3xl border-2 border-ink bg-yellow px-8 py-5 font-display text-2xl font-black shadow-hard sm:text-3xl">
         <CheckCircle2 className="h-8 w-8 shrink-0 sm:h-9 sm:w-9" />
         {message}
       </div>

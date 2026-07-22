@@ -133,7 +133,7 @@ export default function App() {
       )}
 
       <footer className="mt-12 flex items-center justify-center gap-2 text-xs text-ink/40">
-        <span>Blink · a Two-Eyed People tool</span>
+        <span>blink · one eye on the time</span>
         <span aria-hidden>·</span>
         <span className="inline-flex items-center gap-1">
           {syncStatus === 'offline' ? (
