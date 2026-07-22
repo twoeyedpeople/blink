@@ -6,8 +6,8 @@ interface HeaderProps {
 export function Header({ route, onNavigate }: HeaderProps) {
   const tabs = [
     { id: '/', label: 'Timer' },
-    { id: '/history', label: 'History' },
     { id: '/projects', label: 'Projects' },
+    { id: '/history', label: 'History' },
   ]
   return (
     <header className="flex items-center justify-between gap-4 py-6">
