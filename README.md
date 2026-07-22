@@ -7,7 +7,7 @@ Time tracking in the blink of an eye. A Two-Eyed People tool, sibling to Chronos
 - One big START button. Pick a project, optionally say what you're doing, go.
 - Description is editable while tracking and after.
 - Every entry is editable: project, date, start, end, description. Delete too.
-- Minimum billing unit is 30 minutes; anything under rounds up, longer times round up to the next 30-minute block. Actual time is always shown alongside.
+- Minimum billing unit is 15 minutes; anything under rounds up, longer times round up to the next 15-minute block. Actual time is always shown alongside.
 - Historical list grouped by day, with a monthly billed total and per-project breakdown.
 - Month-by-month navigation and CSV export.
 - Projects page: add, rename, recolour (click the dot), archive, delete.

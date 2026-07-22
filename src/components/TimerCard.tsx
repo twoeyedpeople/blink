@@ -130,7 +130,7 @@ export function TimerCard({ store, now, onNavigate, userName }: TimerCardProps) 
         START
       </button>
       <p className="mt-4 text-center text-xs font-medium text-ink/50">
-        Minimum billing unit is 30 minutes. Time rounds up.
+        Minimum billing unit is 15 minutes. Time rounds up.
       </p>
 
       <button

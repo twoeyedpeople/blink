@@ -1,13 +1,13 @@
-// Billing rule: minimum unit is 30 minutes, everything rounds UP to the next 30.
+// Billing rule: minimum unit is 15 minutes, everything rounds UP to the next 15.
 export function billedMinutes(ms: number): number {
   const mins = ms / 60000
   if (mins <= 0) return 0
-  return Math.max(30, Math.ceil(mins / 30) * 30)
+  return Math.max(15, Math.ceil(mins / 15) * 15)
 }
 
 export function formatBilled(mins: number): string {
   const h = mins / 60
-  return Number.isInteger(h) ? `${h}h` : `${h.toFixed(1)}h`
+  return Number.isInteger(h) ? `${h}h` : `${parseFloat(h.toFixed(2))}h`
 }
 
 // 01:23:45 style ticking clock

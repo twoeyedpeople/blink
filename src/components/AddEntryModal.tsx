@@ -73,15 +73,15 @@ export function AddEntryModal({ projects, defaultProjectId, onAdd, onClose }: Ad
             Hours
             <input
               type="number"
-              step={0.5}
-              min={0.5}
+              step={0.25}
+              min={0.25}
               value={hours}
               onChange={(e) => setHours(Number(e.target.value))}
               className="mt-1 w-full rounded-2xl border-2 border-ink bg-white px-4 py-3 outline-none focus:bg-pink-soft"
             />
           </label>
         </div>
-        <p className="mt-2 text-xs text-ink/50">Bills in 30 minute blocks, same as tracked time.</p>
+        <p className="mt-2 text-xs text-ink/50">Bills in 15 minute blocks, same as tracked time.</p>
 
         <button
           disabled={!canSubmit}
