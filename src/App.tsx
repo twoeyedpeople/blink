@@ -124,6 +124,8 @@ export default function App() {
         <SettingsModal
           name={userName}
           required={settingsRequired}
+          prefs={store.prefs}
+          onUpdatePrefs={store.setPrefs}
           onSave={(n) => {
             setUserName(n)
             setSettingsOpen(false)

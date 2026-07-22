@@ -1,4 +1,4 @@
-import { Archive, ArchiveRestore, ChevronDown, FileSpreadsheet, Plus, Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore, FileSpreadsheet, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { PROJECT_COLOURS } from '../types'
@@ -7,7 +7,7 @@ import { downloadClientReport } from '../lib/clientReport'
 export function ProjectsPage({ store }: { store: Store }) {
   const [name, setName] = useState('')
   const [rate, setRate] = useState('')
-  const { projects, entries, prefs, setPrefs } = store
+  const { projects, entries } = store
   const sorted = [...projects].sort(
     (a, b) => Number(a.archived) - Number(b.archived) || a.createdAt - b.createdAt,
   )
@@ -30,19 +30,6 @@ export function ProjectsPage({ store }: { store: Store }) {
       return
     }
     if (confirm('Delete this project?')) store.deleteProject(id)
-  }
-
-  const enableSmartIdle = async () => {
-    if (!window.IdleDetector) {
-      alert('Smart idle detection needs Chrome or Edge. The sleep guard still works everywhere.')
-      return
-    }
-    const permission = await window.IdleDetector.requestPermission()
-    if (permission === 'granted') {
-      setPrefs({ ...prefs, smartIdle: true })
-    } else {
-      alert('Permission was not granted, so smart idle stays off.')
-    }
   }
 
   return (
@@ -150,48 +137,6 @@ export function ProjectsPage({ store }: { store: Store }) {
             ))}
           </ul>
         )}
-      </section>
-
-      <section className="rounded-3xl border-2 border-ink bg-white p-6 shadow-hard sm:p-8">
-        <h2 className="font-display text-2xl font-black">Idle detection</h2>
-        <p className="mt-2 text-sm text-ink/60">
-          If the machine goes to sleep or the lid closes, Blink always stops the timer at the
-          moment activity ended. Smart idle detection (Chrome and Edge only) also catches you
-          wandering off while the machine stays awake.
-        </p>
-        <div className="mt-4 flex flex-wrap items-center gap-4">
-          <label className="text-sm font-bold">
-            Consider me idle after
-            <span className="relative ml-2 inline-block">
-              <select
-                value={prefs.idleMinutes}
-                onChange={(e) => setPrefs({ ...prefs, idleMinutes: Number(e.target.value) })}
-                className="appearance-none rounded-xl border-2 border-ink bg-white py-2 pl-3 pr-8 text-sm font-bold outline-none"
-              >
-                <option value={5}>5 minutes</option>
-                <option value={10}>10 minutes</option>
-                <option value={15}>15 minutes</option>
-                <option value={30}>30 minutes</option>
-              </select>
-              <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 h-4 w-4 -translate-y-1/2" />
-            </span>
-          </label>
-          {prefs.smartIdle ? (
-            <button
-              onClick={() => setPrefs({ ...prefs, smartIdle: false })}
-              className="rounded-full border-2 border-ink bg-green px-4 py-2 text-sm font-bold"
-            >
-              Smart idle: ON (click to disable)
-            </button>
-          ) : (
-            <button
-              onClick={enableSmartIdle}
-              className="rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold hover:bg-pink-soft"
-            >
-              Enable smart idle detection
-            </button>
-          )}
-        </div>
       </section>
     </div>
   )
