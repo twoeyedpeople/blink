@@ -21,7 +21,7 @@ export function Header({ route, onNavigate }: HeaderProps) {
         <div>
           <h1 className="font-serif text-[27px] leading-none">Blink</h1>
           <p className="mt-1 text-xs font-medium tracking-wide text-ink/60">
-            The Temporal Tally
+            Eyes on the time
           </p>
         </div>
       </button>
