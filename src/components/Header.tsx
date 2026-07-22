@@ -80,7 +80,7 @@ export function Header({ route, onNavigate, onOpenSettings, hasName }: HeaderPro
         <img
           src="/Logo_black.png"
           alt="Two-Eyed People"
-          className="hidden h-[27px] justify-self-end md:block"
+          className="hidden h-[32.4px] justify-self-end md:block"
         />
       </div>
 
