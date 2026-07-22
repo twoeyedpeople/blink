@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'America', ui-sans-serif, system-ui, sans-serif;
+  --font-serif: 'DaVinci', Georgia, serif;
+  --color-pink: #FFC2E8;
+  --color-pink-soft: #FFEDF9;
+  --color-magenta: #C21A88;
+  --color-orange: #FF7119;
+  --color-green: #3DDA7B;
+  --color-blue: #5F7CFF;
+  --color-ink: #111111;
+}
+
+body {
+  background: var(--color-pink);
+  color: var(--color-ink);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+}
+
+.shadow-hard { box-shadow: 5px 5px 0 0 #111; }
+.shadow-hard-sm { box-shadow: 3px 3px 0 0 #111; }
+
+.btn-press { transition: transform 80ms ease, box-shadow 80ms ease; }
+.btn-press:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 0 #111; }
+
+@keyframes blinkPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.25; }
+}
+.pulse-dot { animation: blinkPulse 1.6s ease-in-out infinite; }
+
+input[type='time']::-webkit-calendar-picker-indicator,
+input[type='date']::-webkit-calendar-picker-indicator {
+  opacity: 0.5;
+}
