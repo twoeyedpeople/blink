@@ -103,12 +103,12 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
           </h2>
           <div className="mt-3 flex flex-col gap-3 text-sm text-ink/60">
             <p>
-              Behind this lock sits a collection of secret timelines, mysterious builds and
-              ongoing Two-Eyed People operations.
+              Behind this lock sits a collection of secret thingies, mysterious projects and
+              ongoing Two-Eyed People experiments.
             </p>
             <p>Some of it is real. Some of it is… less explainable.</p>
             <p className="font-black uppercase tracking-[0.14em] text-ink/80">
-              Enter at your own risk
+              Enter at your own risk.
             </p>
           </div>
 
@@ -147,7 +147,7 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
               type="submit"
               className="btn-press rounded-2xl border-2 border-ink bg-green py-4 font-display text-sm font-black shadow-hard-sm"
             >
-              Unlock Dashboard
+              Unlock Portal
             </button>
           </form>
         </div>
