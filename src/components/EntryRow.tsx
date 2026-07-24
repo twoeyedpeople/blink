@@ -1,11 +1,10 @@
-import { Pencil, PencilLine, Trash2, User, X, Zap } from 'lucide-react'
+import { Pencil, Trash2, User, X, Zap } from 'lucide-react'
 import { useState } from 'react'
 import type { Entry, Project } from '../types'
 import type { Store } from '../hooks/useStore'
 import {
   billedMinutes,
   formatBilled,
-  formatDuration,
   formatTime,
   fromDateTimeInputs,
   toDateInput,
@@ -34,54 +33,50 @@ export function EntryRow({ entry, project, store }: EntryRowProps) {
 
   return (
     <li className="rounded-2xl border-2 border-ink bg-white p-4">
-      <div className="flex items-start gap-3">
-        <span
-          className="mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-2 border-ink"
-          style={{ backgroundColor: project?.colour ?? '#ccc' }}
-          title={project?.name}
-        />
-        <div className="min-w-0 flex-1">
-          <input
-            value={entry.description}
-            onChange={(e) => store.updateEntry(entry.id, { description: e.target.value })}
-            placeholder="What was this?"
-            className="w-full bg-transparent font-medium outline-none placeholder:text-ink/35"
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+        <div className="flex min-w-0 items-start gap-3 sm:flex-1">
+          <span
+            className="mt-1.5 h-3.5 w-3.5 shrink-0 rounded-full border-2 border-ink"
+            style={{ backgroundColor: project?.colour ?? '#ccc' }}
+            title={project?.name}
           />
-          <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm text-ink/55">
-            <span className="font-bold" style={{ color: project?.colour }}>
-              {project?.name ?? 'No project'}
-            </span>
-            <span>
-              {formatTime(entry.start)} – {formatTime(entry.end)}
-            </span>
-            {entry.autoStopped && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-pink-soft px-2 py-0.5 text-xs font-bold text-magenta">
-                <Zap className="h-3 w-3" /> auto-stopped
+          <div className="min-w-0 flex-1">
+            <input
+              value={entry.description}
+              onChange={(e) => store.updateEntry(entry.id, { description: e.target.value })}
+              placeholder="What was this?"
+              className="w-full bg-transparent text-sm font-medium outline-none placeholder:text-ink/35 sm:text-base"
+            />
+            <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-sm text-ink/55">
+              <span className="font-bold" style={{ color: project?.colour }}>
+                {project?.name ?? 'No project'}
               </span>
-            )}
-            {entry.manual && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-pink-soft px-2 py-0.5 text-xs font-bold text-blue">
-                <PencilLine className="h-3 w-3" /> manual
+              <span>
+                {formatTime(entry.start)} – {formatTime(entry.end)}
               </span>
-            )}
-            {entry.loggedBy && (
-              <span className="inline-flex items-center gap-1 rounded-full bg-ink/5 px-2 py-0.5 text-xs font-bold text-ink/70">
-                <User className="h-3 w-3" /> {entry.loggedBy}
-              </span>
-            )}
-          </p>
+              {entry.autoStopped && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-pink-soft px-2 py-0.5 text-xs font-bold text-magenta">
+                  <Zap className="h-3 w-3" /> auto-stopped
+                </span>
+              )}
+              {entry.loggedBy && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-ink/5 px-2 py-0.5 text-xs font-bold text-ink/70">
+                  <User className="h-3 w-3" /> {entry.loggedBy}
+                </span>
+              )}
+            </p>
+          </div>
         </div>
-        <div className="text-right">
+        <div className="flex items-center justify-between gap-3 sm:shrink-0">
           <p className="font-display text-xl font-black leading-none">{formatBilled(billed)}</p>
-          <p className="mt-1 text-xs text-ink/50">{formatDuration(actual)} actual</p>
+          <button
+            onClick={() => setEditing(!editing)}
+            className="shrink-0 rounded-full border-2 border-ink p-2 hover:bg-pink-soft"
+            aria-label={editing ? 'Close editor' : 'Edit entry'}
+          >
+            {editing ? <X className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
+          </button>
         </div>
-        <button
-          onClick={() => setEditing(!editing)}
-          className="rounded-full border-2 border-ink p-2 hover:bg-pink-soft"
-          aria-label={editing ? 'Close editor' : 'Edit entry'}
-        >
-          {editing ? <X className="h-4 w-4" /> : <Pencil className="h-4 w-4" />}
-        </button>
       </div>
 
       {editing && (

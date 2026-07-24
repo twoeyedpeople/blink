@@ -133,7 +133,7 @@ export function ClientView({ shareId }: { shareId: string }) {
                 logged this month · ${data.hourlyRate}/hr
               </p>
             </div>
-            <div className="text-right">
+            <div className="text-left sm:text-right">
               <p className="font-display text-4xl font-black text-magenta">
                 {formatDollars(totalDollars)}
               </p>

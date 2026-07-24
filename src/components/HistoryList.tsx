@@ -129,7 +129,7 @@ export function HistoryList({ store }: { store: Store }) {
             {filteredProject ? ` · $${filteredProject.hourlyRate}/hr` : ''}
           </p>
         </div>
-        <div className="text-right">
+        <div className="text-left sm:text-right">
           <p className="font-display text-4xl font-black text-magenta">{formatDollars(totalDollars)}</p>
           <p className="text-sm font-medium text-ink/60">Total</p>
         </div>

@@ -6,6 +6,7 @@ export function billedMinutes(ms: number): number {
 }
 
 export function formatBilled(mins: number): string {
+  if (mins < 60) return `${mins}m`
   const h = mins / 60
   return Number.isInteger(h) ? `${h}h` : `${parseFloat(h.toFixed(2))}h`
 }
