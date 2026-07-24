@@ -1,15 +1,17 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Download, User } from 'lucide-react'
 import { useEffect, useMemo, useState } from 'react'
 import { doc, onSnapshot } from 'firebase/firestore'
 import { addMonths, format, isSameMonth, startOfMonth } from 'date-fns'
 import { db } from '../lib/firebase'
 import { billedMinutes, dollarsForMinutes, formatBilled, formatDollars, toDateInput } from '../lib/time'
+import { downloadClientReport } from '../lib/clientReport'
 
 interface ClientEntry {
   id: string
   start: number
   end: number
   description: string
+  loggedBy?: string
 }
 
 interface ClientDoc {
@@ -89,8 +91,18 @@ export function ClientView({ shareId }: { shareId: string }) {
 
       {state === 'loaded' && data && (
         <section className="mt-6 rounded-3xl border-2 border-ink bg-white p-6 shadow-hard sm:p-8">
-          <h2 className="font-display text-3xl font-black">{data.projectName}</h2>
-          <p className="mt-1 text-sm text-ink/50">Billing summary, updated as time is logged</p>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <h2 className="font-display text-3xl font-black">{data.projectName}</h2>
+              <p className="mt-1 text-sm text-ink/50">Billing summary, updated as time is logged</p>
+            </div>
+            <button
+              onClick={() => downloadClientReport({ name: data.projectName }, data.entries)}
+              className="flex shrink-0 items-center gap-2 rounded-full border-2 border-ink bg-white px-4 py-2 text-sm font-bold hover:bg-pink-soft"
+            >
+              <Download className="h-4 w-4" /> Download report
+            </button>
+          </div>
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
@@ -140,7 +152,14 @@ export function ClientView({ shareId }: { shareId: string }) {
                       key={e.id}
                       className="flex items-center justify-between gap-3 rounded-2xl border-2 border-ink bg-white p-4"
                     >
-                      <p className="min-w-0 flex-1 truncate font-medium">{e.description}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate font-medium">{e.description}</p>
+                        {e.loggedBy && (
+                          <p className="mt-0.5 flex items-center gap-1 text-xs text-ink/50">
+                            <User className="h-3 w-3" /> {e.loggedBy}
+                          </p>
+                        )}
+                      </div>
                       <div className="flex shrink-0 items-center gap-3 text-sm font-bold">
                         <span>{formatBilled(billedMinutes(e.end - e.start))}</span>
                         <span className="text-magenta">

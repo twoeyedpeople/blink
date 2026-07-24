@@ -21,7 +21,13 @@ export function usePublishClientViews(store: Store) {
           if (!project.shareId) continue
           const entries = store.entries
             .filter((e) => e.projectId === project.id)
-            .map((e) => ({ id: e.id, start: e.start, end: e.end, description: e.description }))
+            .map((e) => ({
+              id: e.id,
+              start: e.start,
+              end: e.end,
+              description: e.description,
+              ...(e.loggedBy ? { loggedBy: e.loggedBy } : {}),
+            }))
           setDoc(doc(db, 'blink_clients', project.shareId), {
             projectName: project.name,
             hourlyRate: project.hourlyRate,

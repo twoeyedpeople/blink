@@ -129,7 +129,12 @@ export function ProjectsPage({ store }: { store: Store }) {
                     <Link2 className="h-4 w-4" />
                   </button>
                   <button
-                    onClick={() => downloadClientReport(p, entries)}
+                    onClick={() =>
+                      downloadClientReport(
+                        p,
+                        entries.filter((e) => e.projectId === p.id),
+                      )
+                    }
                     className="rounded-full border-2 border-ink p-2 hover:bg-pink-soft"
                     title="Download client report (XLSX)"
                   >

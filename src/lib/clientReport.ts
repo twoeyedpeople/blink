@@ -1,10 +1,15 @@
 import ExcelJS from 'exceljs'
 import { format } from 'date-fns'
-import type { Entry, Project } from '../types'
 import { billedMinutes, toDateInput } from './time'
 
 const INK = 'FF111111'
 const PINK_SOFT = 'FFFFEDF9'
+
+interface ReportEntry {
+  start: number
+  end: number
+  description: string
+}
 
 async function loadLogo(): Promise<ArrayBuffer | null> {
   try {
@@ -18,10 +23,11 @@ async function loadLogo(): Promise<ArrayBuffer | null> {
 
 // Client-facing report: billed hours only, no actual/raw time, no internal notes
 // (auto-stopped flags etc). Descriptions are included as typed, they're client-eyes copy.
-export async function downloadClientReport(project: Project, entries: Entry[]) {
-  const projectEntries = entries
-    .filter((e) => e.projectId === project.id)
-    .sort((a, b) => a.start - b.start)
+// Takes already-filtered entries for the one project, so this can be called equally
+// from the internal Projects page (full Entry objects) and the public client link
+// (redacted ClientEntry objects), neither of which needs to shape-match the other.
+export async function downloadClientReport(project: { name: string }, entries: ReportEntry[]) {
+  const projectEntries = [...entries].sort((a, b) => a.start - b.start)
 
   const workbook = new ExcelJS.Workbook()
   workbook.creator = 'Two-Eyed People'
