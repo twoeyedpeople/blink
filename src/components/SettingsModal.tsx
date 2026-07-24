@@ -74,7 +74,7 @@ export function SettingsModal({
         <div className="mt-8 border-t-2 border-ink/10 pt-6">
           <h3 className="font-display text-lg font-black">Idle detection</h3>
           <p className="mt-2 text-sm text-ink/60">
-            If the machine goes to sleep or the lid closes, Tim always stops the timer at the
+            If the machine goes to sleep or the lid closes, Blink always stops the timer at the
             moment activity ended. Smart idle detection (Chrome and Edge only) also catches you
             wandering off while the machine stays awake.
           </p>

@@ -1,7 +1,6 @@
 import { CloudOff, RefreshCw, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Header } from './components/Header'
-import { Wordmark } from './components/Wordmark'
 import { TimerCard } from './components/TimerCard'
 import { HistoryList } from './components/HistoryList'
 import { SettingsModal } from './components/SettingsModal'
@@ -73,7 +72,7 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
   }
 
   useEffect(() => {
-    document.title = store.running ? '⏱ Tim — tracking' : 'Tim the Timer'
+    document.title = store.running ? '⏱ Blink — tracking' : 'Blink'
   }, [store.running])
 
   const navigate = (r: string) => {
@@ -86,13 +85,18 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
       ? 'the screen locked'
       : notice?.reason === 'idle'
         ? 'you went idle'
-        : 'the machine went to sleep or Tim was closed'
+        : 'the machine went to sleep or Blink was closed'
 
   if (dashboardGateEnabled && !isDashboardUnlocked) {
     return (
       <div className="flex min-h-screen items-center justify-center p-6">
         <div className="w-full max-w-md rounded-3xl border-2 border-ink bg-white p-8 shadow-hard">
-          <Wordmark />
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
+              <img src="/Icon.png" alt="" className="h-[22px] w-[22px]" />
+            </div>
+            <h1 className="font-serif text-2xl leading-none">blink</h1>
+          </div>
 
           <h2 className="mt-6 font-display text-3xl font-black">
             Halt! Turn back, or present the sacred key.
@@ -191,7 +195,7 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
           <div className="w-full max-w-md rounded-3xl border-2 border-ink bg-white p-8 shadow-hard">
             <h2 className="font-display text-2xl font-black">Timer was left running</h2>
             <p className="mt-3 text-ink/70">
-              Tim was closed while a timer was going. Last sign of life was{' '}
+              Blink was closed while a timer was going. Last sign of life was{' '}
               <strong>{formatTime(recovery.lastSeen)}</strong>. Stop it back there, or keep it
               running?
             </p>
@@ -230,7 +234,7 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
       <footer className="mt-12 flex flex-wrap items-center justify-center gap-2 text-xs text-ink/40">
         <span>© Two-Eyed People Pty Ltd</span>
         <span aria-hidden>|</span>
-        <span>Tim: One eye on the time</span>
+        <span>Blink: One eye on the time</span>
         <span aria-hidden>|</span>
         <span className="inline-flex items-center gap-1">
           {syncStatus === 'offline' ? (

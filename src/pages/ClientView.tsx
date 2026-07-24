@@ -5,7 +5,6 @@ import { addMonths, format, isSameMonth, startOfMonth } from 'date-fns'
 import { db } from '../lib/firebase'
 import { billedMinutes, dollarsForMinutes, formatBilled, formatDollars, toDateInput } from '../lib/time'
 import { downloadClientReport } from '../lib/clientReport'
-import { Wordmark } from '../components/Wordmark'
 
 interface ClientEntry {
   id: string
@@ -71,7 +70,12 @@ export function ClientView({ shareId }: { shareId: string }) {
 
   return (
     <div className="mx-auto min-h-screen max-w-2xl px-4 pb-16 pt-10">
-      <Wordmark />
+      <div className="flex items-center gap-2.5">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
+          <img src="/Icon.png" alt="" className="h-[22px] w-[22px]" />
+        </div>
+        <h1 className="font-serif text-2xl leading-none">blink</h1>
+      </div>
 
       {state === 'loading' && <p className="mt-10 text-center text-ink/50">Loading…</p>}
 

@@ -40,7 +40,7 @@ const RECOVERY_GAP_MS = 5 * 60_000
 // 1. Sleep/lid-close: setInterval freezes during sleep, so a large tick gap on wake
 //    means the machine slept. Stop the timer back at the moment it froze.
 // 2. Smart idle (opt-in, Chrome): the Idle Detection API reports system-level
-//    keyboard/mouse idleness and screen lock, even when Tim is in a background tab.
+//    keyboard/mouse idleness and screen lock, even when Blink is in a background tab.
 // 3. Recovery: if the tab was closed while tracking, on next load offer to stop the
 //    entry at the last heartbeat instead of silently counting the gap.
 export function useIdleGuard({ running, prefs, stop }: IdleGuardArgs) {
