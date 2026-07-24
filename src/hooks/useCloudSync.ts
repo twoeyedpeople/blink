@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { doc, onSnapshot, setDoc } from 'firebase/firestore'
-import { db } from '../lib/firebase'
+import { authReady, db } from '../lib/firebase'
 import type { Entry, Prefs, Project, Running } from '../types'
 import type { Store } from './useStore'
 
@@ -26,25 +26,33 @@ export function useCloudSync(store: Store): SyncStatus {
   const skipNextWrite = useRef(true) // don't push initial local defaults over whatever's remote
 
   useEffect(() => {
-    const unsubscribe = onSnapshot(
-      WORKSPACE_REF,
-      (snap) => {
-        const data = snap.data() as WorkspaceDoc | undefined
-        if (data && data.updatedAt > lastKnownUpdatedAt.current) {
-          lastKnownUpdatedAt.current = data.updatedAt
-          skipNextWrite.current = true
-          store.replaceAll({
-            projects: data.projects ?? [],
-            entries: data.entries ?? [],
-            prefs: data.prefs ?? { idleMinutes: 15, smartIdle: false },
-            running: data.running ?? null,
-          })
-        }
-        setStatus('synced')
-      },
-      () => setStatus('offline'),
-    )
-    return unsubscribe
+    let unsubscribe: (() => void) | undefined
+    let cancelled = false
+    authReady.then(() => {
+      if (cancelled) return
+      unsubscribe = onSnapshot(
+        WORKSPACE_REF,
+        (snap) => {
+          const data = snap.data() as WorkspaceDoc | undefined
+          if (data && data.updatedAt > lastKnownUpdatedAt.current) {
+            lastKnownUpdatedAt.current = data.updatedAt
+            skipNextWrite.current = true
+            store.replaceAll({
+              projects: data.projects ?? [],
+              entries: data.entries ?? [],
+              prefs: data.prefs ?? { idleMinutes: 15, smartIdle: false },
+              running: data.running ?? null,
+            })
+          }
+          setStatus('synced')
+        },
+        () => setStatus('offline'),
+      )
+    })
+    return () => {
+      cancelled = true
+      unsubscribe?.()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -55,17 +63,19 @@ export function useCloudSync(store: Store): SyncStatus {
     }
     setStatus('saving')
     const timer = setTimeout(() => {
-      const updatedAt = Date.now()
-      lastKnownUpdatedAt.current = updatedAt
-      setDoc(WORKSPACE_REF, {
-        projects: store.projects,
-        entries: store.entries,
-        prefs: store.prefs,
-        running: store.running,
-        updatedAt,
+      authReady.then(() => {
+        const updatedAt = Date.now()
+        lastKnownUpdatedAt.current = updatedAt
+        setDoc(WORKSPACE_REF, {
+          projects: store.projects,
+          entries: store.entries,
+          prefs: store.prefs,
+          running: store.running,
+          updatedAt,
+        })
+          .then(() => setStatus('synced'))
+          .catch(() => setStatus('offline'))
       })
-        .then(() => setStatus('synced'))
-        .catch(() => setStatus('offline'))
     }, DEBOUNCE_MS)
     return () => clearTimeout(timer)
   }, [store.projects, store.entries, store.prefs, store.running])

@@ -1,13 +1,23 @@
-import { Archive, ArchiveRestore, FileSpreadsheet, Plus, Trash2 } from 'lucide-react'
+import { Archive, ArchiveRestore, FileSpreadsheet, Link2, Plus, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import type { Store } from '../hooks/useStore'
 import { PROJECT_COLOURS } from '../types'
 import { downloadClientReport } from '../lib/clientReport'
+import { Toast } from '../components/Toast'
 
 export function ProjectsPage({ store }: { store: Store }) {
   const [name, setName] = useState('')
   const [rate, setRate] = useState('')
+  const [toast, setToast] = useState<string | null>(null)
   const { projects, entries } = store
+
+  const copyClientLink = async (id: string, shareId: string | undefined) => {
+    const finalShareId = shareId ?? crypto.randomUUID()
+    if (!shareId) store.updateProject(id, { shareId: finalShareId })
+    const url = `${window.location.origin}${window.location.pathname}#/client/${finalShareId}`
+    await navigator.clipboard.writeText(url)
+    setToast('Client link copied')
+  }
   const sorted = [...projects].sort(
     (a, b) => Number(a.archived) - Number(b.archived) || a.createdAt - b.createdAt,
   )
@@ -112,6 +122,13 @@ export function ProjectsPage({ store }: { store: Store }) {
                 )}
                 <div className="flex shrink-0 items-center gap-2">
                   <button
+                    onClick={() => copyClientLink(p.id, p.shareId)}
+                    className="rounded-full border-2 border-ink p-2 hover:bg-pink-soft"
+                    title="Copy client billing link"
+                  >
+                    <Link2 className="h-4 w-4" />
+                  </button>
+                  <button
                     onClick={() => downloadClientReport(p, entries)}
                     className="rounded-full border-2 border-ink p-2 hover:bg-pink-soft"
                     title="Download client report (XLSX)"
@@ -138,6 +155,8 @@ export function ProjectsPage({ store }: { store: Store }) {
           </ul>
         )}
       </section>
+
+      {toast && <Toast message={toast} onDone={() => setToast(null)} />}
     </div>
   )
 }

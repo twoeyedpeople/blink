@@ -5,9 +5,11 @@ import { TimerCard } from './components/TimerCard'
 import { HistoryList } from './components/HistoryList'
 import { SettingsModal } from './components/SettingsModal'
 import { ProjectsPage } from './pages/ProjectsPage'
+import { ClientView } from './pages/ClientView'
 import { useStore } from './hooks/useStore'
 import { useIdleGuard } from './hooks/useIdleGuard'
 import { useCloudSync } from './hooks/useCloudSync'
+import { usePublishClientViews } from './hooks/usePublishClientViews'
 import { useUserName } from './hooks/useUserName'
 import { formatTime } from './lib/time'
 
@@ -22,11 +24,31 @@ const SYNC_LABEL = {
   offline: 'Offline — saved on this device only',
 }
 
+// Thin router: a client-facing /client/{shareId} link needs none of the
+// internal app's machinery (store, idle guard, cloud sync), so it's kept as
+// a fully separate component rather than an early return inside MainApp,
+// which would change how many hooks run between renders on the same route.
 export default function App() {
+  const [route, setRoute] = useState(currentRoute)
+
+  useEffect(() => {
+    const onHash = () => setRoute(currentRoute())
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  if (route.startsWith('/client/')) {
+    return <ClientView shareId={route.slice('/client/'.length)} />
+  }
+
+  return <MainApp route={route} setRoute={setRoute} />
+}
+
+function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => void }) {
   const store = useStore()
   const { now, notice, dismissNotice, recovery, resolveRecovery } = useIdleGuard(store)
   const syncStatus = useCloudSync(store)
-  const [route, setRoute] = useState(currentRoute)
+  usePublishClientViews(store)
   const [userName, setUserName] = useUserName()
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [settingsRequired, setSettingsRequired] = useState(false)
@@ -35,12 +57,6 @@ export default function App() {
     setSettingsRequired(required)
     setSettingsOpen(true)
   }
-
-  useEffect(() => {
-    const onHash = () => setRoute(currentRoute())
-    window.addEventListener('hashchange', onHash)
-    return () => window.removeEventListener('hashchange', onHash)
-  }, [])
 
   useEffect(() => {
     document.title = store.running ? '⏱ Blink — tracking' : 'Blink'

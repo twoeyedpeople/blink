@@ -23,8 +23,11 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
-    // Blink (time tracker) workspace document. Same prototype-mode pattern as above:
-    // no auth, shape-validated. Single-tenant internal tool, one doc holds all state.
+    // Blink (time tracker) workspace document. One doc holds every project,
+    // rate and time entry for every client, so unlike Chronos's own
+    // collections above this is NOT left open to anonymous read/write:
+    // it requires (anonymous, no-login) Firebase Auth, which keeps it off
+    // limits to anyone who's just grabbed the public web config.
     function isValidBlinkWorkspace(data) {
       return data.projects is list &&
              data.entries is list &&
@@ -33,8 +36,25 @@ service cloud.firestore {
     }
 
     match /blink/{docId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && isValidBlinkWorkspace(request.resource.data);
+    }
+
+    // Redacted, per-project mirror powering the client-facing billing link
+    // (blink_clients/{shareId}). Deliberately public read, an unguessable
+    // shareId in the URL is the only access control, a client bookmarks it
+    // with no login. Write stays gated the same way as the workspace doc,
+    // only Blink's own session ever publishes to these.
+    function isValidClientView(data) {
+      return data.projectName is string &&
+             data.hourlyRate is number &&
+             data.entries is list &&
+             data.updatedAt is number;
+    }
+
+    match /blink_clients/{shareId} {
       allow read: if true;
-      allow write: if isValidBlinkWorkspace(request.resource.data);
+      allow write: if request.auth != null && isValidClientView(request.resource.data);
     }
   }
 }

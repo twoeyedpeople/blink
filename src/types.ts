@@ -5,6 +5,7 @@ export interface Project {
   archived: boolean
   createdAt: number
   hourlyRate: number
+  shareId?: string // powers the read-only client billing link; generated on demand
 }
 
 export interface Entry {
