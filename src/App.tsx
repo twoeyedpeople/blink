@@ -89,7 +89,7 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
 
   if (dashboardGateEnabled && !isDashboardUnlocked) {
     return (
-      <div className="flex min-h-screen items-center justify-center p-6">
+      <div className="flex min-h-screen flex-col items-center justify-center p-6">
         <div className="w-full max-w-md rounded-3xl border-2 border-ink bg-white p-8 shadow-hard">
           <div className="flex items-center gap-2.5">
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
@@ -151,6 +151,21 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
             </button>
           </form>
         </div>
+
+        <footer className="mt-12 flex flex-wrap items-center justify-center gap-2 text-xs text-ink/40">
+          <span>© Two-Eyed People Pty Ltd</span>
+          <span aria-hidden>|</span>
+          <span>Blink: One eye on the time</span>
+          <span aria-hidden>|</span>
+          <span className="inline-flex items-center gap-1">
+            {syncStatus === 'offline' ? (
+              <CloudOff className="h-3 w-3" />
+            ) : (
+              <RefreshCw className={`h-3 w-3 ${syncStatus === 'saving' ? 'animate-spin' : ''}`} />
+            )}
+            {SYNC_LABEL[syncStatus]}
+          </span>
+        </footer>
       </div>
     )
   }
