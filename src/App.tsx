@@ -17,6 +17,8 @@ function currentRoute() {
   return window.location.hash.replace('#', '') || '/'
 }
 
+const DASHBOARD_SESSION_KEY = 'blink_dashboard_unlocked'
+
 const SYNC_LABEL = {
   connecting: 'Connecting…',
   synced: 'Synced',
@@ -53,6 +55,17 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
   const [settingsOpen, setSettingsOpen] = useState(false)
   const [settingsRequired, setSettingsRequired] = useState(false)
 
+  const dashboardPassword = (
+    (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env
+      ?.VITE_DASHBOARD_PASSWORD ?? ''
+  ).trim()
+  const dashboardGateEnabled = dashboardPassword.length > 0
+  const [dashboardPasswordInput, setDashboardPasswordInput] = useState('')
+  const [dashboardPasswordError, setDashboardPasswordError] = useState('')
+  const [isDashboardUnlocked, setIsDashboardUnlocked] = useState(
+    () => window.sessionStorage.getItem(DASHBOARD_SESSION_KEY) === 'true',
+  )
+
   const openSettings = (required = false) => {
     setSettingsRequired(required)
     setSettingsOpen(true)
@@ -73,6 +86,74 @@ function MainApp({ route, setRoute }: { route: string; setRoute: (r: string) => 
       : notice?.reason === 'idle'
         ? 'you went idle'
         : 'the machine went to sleep or Blink was closed'
+
+  if (dashboardGateEnabled && !isDashboardUnlocked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center p-6">
+        <div className="w-full max-w-md rounded-3xl border-2 border-ink bg-white p-8 shadow-hard">
+          <div className="flex items-center gap-2.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
+              <img src="/Icon.png" alt="" className="h-[22px] w-[22px]" />
+            </div>
+            <h1 className="font-serif text-2xl leading-none">blink</h1>
+          </div>
+
+          <h2 className="mt-6 font-display text-3xl font-black">
+            Halt! Turn back, or present the sacred key.
+          </h2>
+          <div className="mt-3 flex flex-col gap-3 text-sm text-ink/60">
+            <p>
+              Behind this lock sits a collection of secret timelines, mysterious builds and
+              ongoing Two-Eyed People operations.
+            </p>
+            <p>Some of it is real. Some of it is… less explainable.</p>
+            <p className="font-black uppercase tracking-[0.14em] text-ink/80">
+              Enter at your own risk
+            </p>
+          </div>
+
+          <form
+            className="mt-6 flex flex-col gap-3"
+            onSubmit={(e) => {
+              e.preventDefault()
+              if (dashboardPasswordInput === dashboardPassword) {
+                window.sessionStorage.setItem(DASHBOARD_SESSION_KEY, 'true')
+                setIsDashboardUnlocked(true)
+                setDashboardPasswordError('')
+                setDashboardPasswordInput('')
+                return
+              }
+              setDashboardPasswordError('That password did not match.')
+            }}
+          >
+            <div className="flex flex-col gap-1.5">
+              <input
+                autoFocus
+                type="password"
+                value={dashboardPasswordInput}
+                onChange={(e) => {
+                  setDashboardPasswordInput(e.target.value)
+                  if (dashboardPasswordError) setDashboardPasswordError('')
+                }}
+                placeholder="Enter password"
+                className="w-full rounded-2xl border-2 border-ink bg-white px-5 py-4 text-sm font-bold outline-none placeholder:text-ink/40 focus:bg-pink-soft"
+              />
+              {dashboardPasswordError && (
+                <p className="text-sm font-medium text-magenta">{dashboardPasswordError}</p>
+              )}
+            </div>
+
+            <button
+              type="submit"
+              className="btn-press rounded-2xl border-2 border-ink bg-green py-4 font-display text-sm font-black shadow-hard-sm"
+            >
+              Unlock Dashboard
+            </button>
+          </form>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="mx-auto min-h-screen max-w-3xl px-4 pb-16">
