@@ -20,7 +20,7 @@ function Brand({ onNavigate }: { onNavigate: (route: string) => void }) {
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
         <img src="/Icon.png" alt="" className="h-[22px] w-[22px]" />
       </div>
-      <h1 className="font-serif text-2xl leading-none">blink</h1>
+      <h1 className="font-serif text-2xl leading-none">Blink</h1>
     </button>
   )
 }

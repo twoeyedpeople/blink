@@ -70,11 +70,14 @@ export function ClientView({ shareId }: { shareId: string }) {
 
   return (
     <div className="mx-auto min-h-screen max-w-2xl px-4 pb-16 pt-10">
-      <div className="flex items-center gap-2.5">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
-          <img src="/Icon.png" alt="" className="h-[22px] w-[22px]" />
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2.5">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border-2 border-ink bg-white shadow-hard-sm">
+            <img src="/Icon.png" alt="" className="h-[22px] w-[22px]" />
+          </div>
+          <h1 className="font-serif text-2xl leading-none">Blink</h1>
         </div>
-        <h1 className="font-serif text-2xl leading-none">blink</h1>
+        <img src="/Logo_black.png" alt="Two-Eyed People" className="hidden h-9 md:block" />
       </div>
 
       {state === 'loading' && <p className="mt-10 text-center text-ink/50">Loading…</p>}
@@ -163,12 +166,9 @@ export function ClientView({ shareId }: { shareId: string }) {
                           </p>
                         )}
                       </div>
-                      <div className="flex shrink-0 items-center gap-3 text-sm font-bold">
-                        <span>{formatBilled(billedMinutes(e.end - e.start))}</span>
-                        <span className="text-magenta">
-                          {formatDollars(dollarsForMinutes(billedMinutes(e.end - e.start), data.hourlyRate))}
-                        </span>
-                      </div>
+                      <span className="shrink-0 text-sm font-bold">
+                        {formatBilled(billedMinutes(e.end - e.start))}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -178,8 +178,10 @@ export function ClientView({ shareId }: { shareId: string }) {
         </section>
       )}
 
-      <footer className="mt-10 flex items-center justify-center gap-2 text-xs text-ink/40">
+      <footer className="mt-10 flex flex-wrap items-center justify-center gap-2 text-xs text-ink/40">
         <span>© Two-Eyed People Pty Ltd</span>
+        <span aria-hidden>|</span>
+        <span>Blink: One eye on the time</span>
       </footer>
     </div>
   )
