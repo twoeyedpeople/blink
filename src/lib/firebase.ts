@@ -8,7 +8,7 @@ export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId)
 export const auth = getAuth(app)
 
 // Anonymous auth, no login screen. This isn't about identifying who's using
-// Blink, it's the difference between "anyone who copies the public web
+// Tim, it's the difference between "anyone who copies the public web
 // config can read every client's rates and hours straight out of Firestore"
 // and "you'd have to sign in as the app to do that." Firestore rules key off
 // request.auth != null for the main workspace doc; only the redacted

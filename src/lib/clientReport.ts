@@ -103,7 +103,7 @@ export async function downloadClientReport(project: { name: string }, entries: R
   const safeName = project.name.replace(/[^\w\s-]/g, '').trim().replace(/\s+/g, ' ')
   const a = document.createElement('a')
   a.href = URL.createObjectURL(blob)
-  a.download = `Blink - ${safeName} - Time Report.xlsx`
+  a.download = `Tim - ${safeName} - Time Report.xlsx`
   a.click()
   URL.revokeObjectURL(a.href)
 }

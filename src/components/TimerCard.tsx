@@ -95,7 +95,7 @@ export function TimerCard({ store, now, onNavigate, userName, onRequireName }: T
           onClick={() => {
             const result = stop()
             if (!result.saved) {
-              alert('That was under a minute, so it was not saved. Blink and you miss it.')
+              alert('That was under a minute, so it was not saved. Gone in a tick.')
             }
           }}
           className="btn-press mt-5 flex w-full items-center justify-center gap-3 rounded-3xl border-2 border-ink bg-orange py-8 font-display text-5xl font-black text-white shadow-hard"

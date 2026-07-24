@@ -47,7 +47,7 @@ export const START_PHRASES = [
   'Zoom zoom!',
   "Let's cook!",
   'Eyes on!',
-  'Blink and go!',
+  'Tick tock!',
 ]
 
 export function randomStartPhrase(): string {

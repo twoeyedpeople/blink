@@ -66,7 +66,7 @@ export function HistoryList({ store }: { store: Store }) {
       projectFilter === 'all'
         ? ''
         : `-${(projects.find((p) => p.id === projectFilter)?.name ?? '').toLowerCase().replace(/\s+/g, '-')}`
-    a.download = `blink-${format(month, 'yyyy-MM')}${projectSuffix}.csv`
+    a.download = `tim-${format(month, 'yyyy-MM')}${projectSuffix}.csv`
     a.click()
     URL.revokeObjectURL(a.href)
   }
