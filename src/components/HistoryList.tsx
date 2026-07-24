@@ -125,11 +125,14 @@ export function HistoryList({ store }: { store: Store }) {
         <div>
           <p className="font-display text-4xl font-black">{formatBilled(totalBilled)}</p>
           <p className="text-sm font-medium text-ink/60">
-            billed this month{filteredProject ? ' · ' + filteredProject.name : ''}
+            logged this month{filteredProject ? ' · ' + filteredProject.name : ''}
             {filteredProject ? ` · $${filteredProject.hourlyRate}/hr` : ''}
           </p>
         </div>
-        <p className="font-display text-3xl font-black text-magenta">{formatDollars(totalDollars)}</p>
+        <div className="text-right">
+          <p className="font-display text-4xl font-black text-magenta">{formatDollars(totalDollars)}</p>
+          <p className="text-sm font-medium text-ink/60">Total</p>
+        </div>
       </div>
 
       {byDay.length === 0 ? (

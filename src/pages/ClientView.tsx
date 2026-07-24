@@ -126,16 +126,19 @@ export function ClientView({ shareId }: { shareId: string }) {
             </div>
           </div>
 
-          <div className="mt-5 rounded-2xl border-2 border-ink bg-pink-soft p-5">
-            <div className="flex flex-wrap items-baseline gap-x-3">
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 border-ink bg-pink-soft p-5">
+            <div>
               <p className="font-display text-4xl font-black">{formatBilled(totalBilled)}</p>
-              <p className="font-display text-2xl font-black text-magenta">
-                {formatDollars(totalDollars)}
+              <p className="text-sm font-medium text-ink/60">
+                logged this month · ${data.hourlyRate}/hr
               </p>
             </div>
-            <p className="text-sm font-medium text-ink/60">
-              billed this month · ${data.hourlyRate}/hr
-            </p>
+            <div className="text-right">
+              <p className="font-display text-4xl font-black text-magenta">
+                {formatDollars(totalDollars)}
+              </p>
+              <p className="text-sm font-medium text-ink/60">Total</p>
+            </div>
           </div>
 
           {byDay.length === 0 ? (
